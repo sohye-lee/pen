@@ -2,7 +2,7 @@
 
 :root {
     /* Color Settings */
-    --White: rgb(243, 241, 241);
+    --White: rgb(240, 240, 240);
     --Black: rgb(22, 22, 22);
     --Gray: rgb(51, 51, 51);
     --LightGray: rgb(148, 148, 148);
@@ -23,5 +23,95 @@
 }
 
 body {
+    background-color: var(--White);
+}
+ul {
+    list-style: none;
+}
 
+a, a * {
+    text-decoration: none;
+}
+
+.main {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+/* Style Shorcuts */
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.row.between {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row.left {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.row.right {
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.row.top {
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.row.center {
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header */
+.header__container {
+    width: 100vw;
+    height: 90px;
+    justify-content: center;
+    /* position: fixed;
+    top: 0;
+    left: 0; */
+    background: linear-gradient(to bottom, rgba(240,240,240,1) 80%, rgba(240,240,240,0) 100%);
+}
+
+.header__content {
+    width: 100%;
+    height: 100%;
+    padding: 10px 40px;
+}
+
+.logo {
+    font-size: 3rem !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 800;
+    margin-right: 30px !important;
+}
+.header__item {
+    margin-right: 1.2rem;
+    font-size: 1.2rem;
+}
+
+.header__item a {
+    color: var(--Black);
+}
+.header__bar {
+    height: 3px;
+    width: 3rem;
+    background-color: var(--Black);
+    margin: 5px;
+}
+
+.footer__container {
+    width: 100vw;
+    height: 60px;
+    display: flex;
+    text-align: center;
 }
