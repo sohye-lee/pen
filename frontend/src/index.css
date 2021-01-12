@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans&family=Poppins:wght@100;400;600;800&display=swap');
+
+:root {
+    /* Color Settings */
+    --White: rgb(243, 241, 241);
+    --Black: rgb(22, 22, 22);
+    --Gray: rgb(51, 51, 51);
+    --LightGray: rgb(148, 148, 148);
+    --Blue: rgb(26, 26, 226);
+    --Orange: rgb(243, 139, 2);
+    --Pink: rgb(252, 54, 87);
+    
+    /* Shape Settings */
+    --Border: 4px;
+    --Transition: all 350ms ease;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+
+}
