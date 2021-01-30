@@ -1,5 +1,5 @@
 import express from 'express';
-import Follow from '../models/follow';
+import Follow from '../models/follow.js';
 
 const followRouter = express.Router();
 

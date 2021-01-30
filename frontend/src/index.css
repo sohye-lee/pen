@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans&family=Poppins:wght@100;400;600;800&display=swap');
 
+/* ================== STYLE ELEMENTS SETTING ================== */
 :root {
     /* Color Settings */
     --White: rgb(240, 240, 240);
     --Black: rgb(22, 22, 22);
+    --DarkGray: rgb(41, 41, 41);
     --Gray: rgb(51, 51, 51);
     --LightGray: rgb(148, 148, 148);
     --Blue: rgb(26, 26, 226);
     --Orange: rgb(243, 139, 2);
     --Pink: rgb(252, 54, 87);
+    --Lime: rgb(96, 255, 96);
     
     /* Shape Settings */
     --Border: 4px;
@@ -19,7 +22,9 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-weight: 200;
+    letter-spacing: 0.05rem;
 }
 
 body {
@@ -40,7 +45,7 @@ a, a * {
 
 
 
-/* Style Shorcuts */
+/* ================== LAYOUT SETTING ================== */
 .row {
     display: flex;
     flex-direction: row;
@@ -71,7 +76,7 @@ a, a * {
     align-items: center;
 }
 
-/* Header */
+/* ================== Header ================== */
 .header__container {
     width: 100vw;
     height: 90px;
@@ -79,7 +84,9 @@ a, a * {
     /* position: fixed;
     top: 0;
     left: 0; */
-    background: linear-gradient(to bottom, rgba(240,240,240,1) 80%, rgba(240,240,240,0) 100%);
+    /* background: linear-gradient(to bottom, rgba(240,240,240,1) 80%, rgba(240,240,240,0) 100%); */
+    background: var(--White);
+    border-bottom: 0.1rem dotted var(--Black);
 }
 
 .header__content {
@@ -94,6 +101,7 @@ a, a * {
     font-weight: 800;
     margin-right: 30px !important;
 }
+
 .header__item {
     margin-right: 1.2rem;
     font-size: 1.2rem;
@@ -102,6 +110,7 @@ a, a * {
 .header__item a {
     color: var(--Black);
 }
+
 .header__bar {
     height: 3px;
     width: 3rem;
@@ -109,9 +118,21 @@ a, a * {
     margin: 5px;
 }
 
+
+/* ================== FOOTER ================== */
 .footer__container {
     width: 100vw;
     height: 60px;
     display: flex;
     text-align: center;
+}
+
+/* ================== APP PAGE ================== */
+.app__container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.app__content {
+    height: calc(100vh - 150px)
 }

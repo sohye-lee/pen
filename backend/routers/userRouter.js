@@ -14,7 +14,12 @@ userRouter.route('/')
     .catch(err => next(err));
 })
 .post((req,res,next) => {
-    User.create(req.body)
+    User.create({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: req.body.password
+    })
     .then(user => {
         console.log('User Registered : ', user);
         res.statusCode = 200;

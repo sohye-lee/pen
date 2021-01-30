@@ -41,7 +41,11 @@ const postingSchema = mongoose.Schema({
         type: [String],
         default: []
     },
-    comments: [commentSchema]
+    comments: [commentSchema],
+    featured: {
+        type: Boolean,
+        default: false
+    }
 },
 {
     timestamps: true
