@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 
 const userRouter = express.Router();
@@ -13,14 +14,17 @@ userRouter.route('/')
     })
     .catch(err => next(err));
 })
+
+userRouter.route('/signup')
 .post((req,res,next) => {
     User.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
+        username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, 8),
+        isAdmin: req.body.isAdmin
     })
     .then(user => {
+        // const createdUser = user.save();
         console.log('User Registered : ', user);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -28,6 +32,26 @@ userRouter.route('/')
     })
     .catch(err => next(err));
 });
+
+userRouter.route('/login')
+.post((req, res, next) => {
+    User.findOne({ email: req.body.email })
+    .then(user => {
+        if (user) {
+            if (bcrypt.compareSync(req.body.password, user.password)) {
+                res.statusCode = 200;
+                res.send({
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                })
+            }
+        }
+    })
+    .catch(err => next(err));
+});
+
 
 userRouter.route('/:userId')
 .get((req,res,next) => {

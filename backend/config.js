@@ -6,4 +6,3 @@ export const config = {
         clientSecret: "9293517a6d49f1a7666f6d9a43a21f33"
     }
 };
-

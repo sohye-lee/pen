@@ -1,51 +1,47 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../actions/userActions';
 
 
 export default function Signup(props) {
     const dispatch = useDispatch();
-    const [firstname, setFirstname] = useState(''); 
-    const [lastname, setLastname] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const userSignup = useSelector(state => state.userSignup);
+    const { userInfo, loading, error } = userSignup;
 
     const submitHandler = (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert('Password not matched. Please confirm your password.');
         } else {
-            dispatch(signup);
+            dispatch(signup(username, email, password));
+            alert(`Welcome, you are now our new writer! \nusername: ${username} \nemail: ${email}`);
         }
     }
 
     return (
-        <div className="form__container">
-            <form className="form__content">
+        <div className="container__center">
+            <form className="form__content" onSubmit={submitHandler}>
                 <h1 className="form__title">
                     Become Our Writer!
                 </h1>
                 <div className="row">
                     <input 
+                        className="form__input"
                         type="text"
-                        id="firstname"
-                        placeholder="firstname"
-                        value={firstname}
-                        onChange={e => setFirstname(e.target.value)}
+                        id="username"
+                        placeholder="username"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
                     />
                 </div>
                 <div className="row">
                     <input 
-                        type="text"
-                        id="lastname"
-                        placeholder="lastname"
-                        value={lastname}
-                        onChange={e => setLastname(e.target.value)}
-                    />
-                </div>
-                <div className="row">
-                    <input 
+                        className="form__input"
                         type="text"
                         id="email"
                         placeholder="email"
@@ -55,6 +51,7 @@ export default function Signup(props) {
                 </div>
                 <div className="row">
                     <input 
+                        className="form__input"
                         type="text"
                         id="password"
                         placeholder="password"
@@ -64,6 +61,7 @@ export default function Signup(props) {
                 </div>
                 <div className="row">
                     <input 
+                        className="form__input"
                         type="text"
                         id="confirmPassword"
                         placeholder="confirm your password"
@@ -71,7 +69,9 @@ export default function Signup(props) {
                         onChange={e => setConfirmPassword(e.target.value)}
                     />
                 </div>
-                <button className="form__btn btn" type="submit">Create</button>
+                <div className="row">
+                    <button className="form__btn btn" type="submit">Create</button>
+                </div>
             </form>
             
         </div>

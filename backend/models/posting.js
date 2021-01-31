@@ -25,6 +25,10 @@ const postingSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Blog'
     },
+    category: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
