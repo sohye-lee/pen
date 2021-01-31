@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { signup } from '../actions/userActions';
+import { login } from '../actions/userActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
 
-export default function Signup(props) {
+export default function Login(props) {
     const dispatch = useDispatch();
-    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const userSignup = useSelector(state => state.userSignup);
-    const { userInfo, loading, error } = userSignup;
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo, loading, error } = userLogin;
 
     const redirectPath = props.location.search 
         ? props.location.search.split('=')[1]
@@ -21,12 +19,7 @@ export default function Signup(props) {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            alert('Password not matched. Please confirm your password.');
-        } else {
-            dispatch(signup(username, email, password));
-            alert(`Welcome, you are now our new writer! \nusername: ${username} \nemail: ${email}`);
-        }
+        dispatch(login(email, password));
     }
 
     useEffect(() => {
@@ -39,20 +32,10 @@ export default function Signup(props) {
         <div className="container__center">
             <form className="form__content" onSubmit={submitHandler}>
                 <h1 className="form__title">
-                    Become Our Writer!
+                    welcome back!
                 </h1>
                 {loading && <Loading />}
                 {error && <Message message="error">{error}</Message>}
-                <div className="row">
-                    <input 
-                        className="form__input"
-                        type="text"
-                        id="username"
-                        placeholder="username"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                    />
-                </div>
                 <div className="row">
                     <input 
                         className="form__input"
@@ -74,17 +57,7 @@ export default function Signup(props) {
                     />
                 </div>
                 <div className="row">
-                    <input 
-                        className="form__input"
-                        type="text"
-                        id="confirmPassword"
-                        placeholder="confirm your password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-                <div className="row">
-                    <button className="form__btn btn" type="submit">Create</button>
+                    <button className="form__btn btn" type="submit">login</button>
                 </div>
             </form>
         </div>

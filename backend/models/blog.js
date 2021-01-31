@@ -5,10 +5,14 @@ const blogSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    name: {
+    title: {
         type: String,
         required: true,
         unique: true
+    },
+    description: {
+        type: String,
+        required: true
     },
     featured: {
         type: Boolean,

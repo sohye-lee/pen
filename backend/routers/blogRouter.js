@@ -23,6 +23,16 @@ blogRouter.route('/')
     })
     .catch(err => next(err));
 })
+.delete((req,res,next) => {
+    Blog.deleteMany()
+    .then(response => {
+        console.log(`All ${response.deletedCount} blogs deleted!`);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
+    })
+    .catch(err => next(err));
+});
 
 blogRouter.route('/:blogId')
 .get((req,res,next) => {

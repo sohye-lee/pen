@@ -12,6 +12,8 @@
     --Orange: rgb(243, 139, 2);
     --Pink: rgb(252, 54, 87);
     --Lime: rgb(96, 255, 96);
+    --Green: rgb(5, 94, 5);
+    --Red: rgb(110, 5, 5);
     
     /* Shape Settings */
     --Border: 4px;
@@ -105,7 +107,29 @@ a, a * {
     box-shadow: none;
 }
 
+.alert-info {
+    color: var(--Green);
+    background-color: var(--LightGray);
+}
 
+.alert-error {
+    color: var(--Red);
+    background-color: var(--LightGray);
+}
+
+/* ================== ANIMATIONS ================== */
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 /* ================== Header ================== */
 .header__container {
@@ -116,14 +140,13 @@ a, a * {
     border-bottom: 0.1rem dotted var(--Black);
 }
 
-
 .header__content {
     width: 100%;
     height: 100%;
     padding: 10px 40px;
 }
 
-.logo a {
+.logo {
     font-size: 3rem !important;
     font-family: 'Poppins', sans-serif !important;
     font-weight: 800 !important;
@@ -133,6 +156,7 @@ a, a * {
 .header__item {
     margin-right: 1.2rem;
     font-size: 1.2rem;
+    color: var(--Black);
 }
 
 .header__item a {
@@ -172,6 +196,7 @@ a, a * {
     justify-content: center;
     align-items: center;
 }
+
 /* ================== FORM ================== */
 .form__content {
     width: 80%;

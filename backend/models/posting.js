@@ -49,6 +49,10 @@ const postingSchema = mongoose.Schema({
     featured: {
         type: Boolean,
         default: false
+    },
+    like: {
+        type: Number,
+        default: 0
     }
 },
 {
