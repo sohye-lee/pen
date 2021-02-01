@@ -1,16 +1,26 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
+import { generateToken, isAdmin, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
 
 userRouter.route('/')
-.get((req,res,next) => {
+.get(isAuth, isAdmin, (req,res,next) => {
     User.find()
     .then(users => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(users);
+    })
+    .catch(err => next(err));
+})
+.delete(isAuth, isAdmin, (req,res,next) => {
+    User.deleteMany()
+    .then(response => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
     })
     .catch(err => next(err));
 })
@@ -24,11 +34,16 @@ userRouter.route('/signup')
         isAdmin: req.body.isAdmin
     })
     .then(user => {
-        // const createdUser = user.save();
         console.log('User Registered : ', user);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(user);
+        res.send({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user)
+        });
     })
     .catch(err => next(err));
 });
@@ -44,7 +59,8 @@ userRouter.route('/login')
                     _id: user._id,
                     username: user.username,
                     email: user.email,
-                    isAdmin: user.isAdmin
+                    isAdmin: user.isAdmin,
+                    token: generateToken(user)
                 })
             }
         }
@@ -54,7 +70,7 @@ userRouter.route('/login')
 
 
 userRouter.route('/:userId')
-.get((req,res,next) => {
+.get(isAuth, (req,res,next) => {
     User.findById(req.params.userId)
     .then(user => {
         res.statusCode = 200;
@@ -63,18 +79,33 @@ userRouter.route('/:userId')
     })
     .catch(err => next(err));
 })
-.put((req,res,next) => {
-    User.findByIdAndUpdate(req.params.userId, {
-        $set: req.body
-    }, { new: true })
+.put(isAuth, (req,res,next) => {
+    User.findById(req.body.userId)
     .then(user => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(user);
+        if (user) {
+            user.username = req.body.username || user.name;
+            user.email = req.body.email || user.email;
+            if (req.body.password) {
+                user.password = bcrypt.hashSync(req.body.password, 8);
+            }
+        };
+        user.save()
+        .then(user => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.send({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                token: generateToken(user)
+            })
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 })
-.delete((req,res,next) => {
+.delete(isAuth, (req,res,next) => {
     User.findByIdAndDelete(req.params.userId)
     .then(response => {
         console.log('User Deleted')

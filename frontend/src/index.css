@@ -117,6 +117,11 @@ a, a * {
     background-color: var(--LightGray);
 }
 
+.alert-success {
+    color: var(--Blue);
+    background-color: var(--LightGray);
+}
+
 /* ================== ANIMATIONS ================== */
 .spin {
     animation: spin 1s linear infinite;
@@ -131,6 +136,12 @@ a, a * {
     }
 }
 
+.tilt {
+    transform: rotate(-30deg);
+}
+
+
+
 /* ================== Header ================== */
 .header__container {
     width: 100vw;
@@ -138,6 +149,7 @@ a, a * {
     justify-content: center;
     background: var(--White);
     border-bottom: 0.1rem dotted var(--Black);
+    position: relative;
 }
 
 .header__content {
@@ -159,9 +171,15 @@ a, a * {
     color: var(--Black);
 }
 
-.header__item a {
+.header__item * {
     color: var(--Black);
 }
+
+.search {
+    min-width: 6rem;
+    max-width: 25rem;
+}
+
 
 .header__bar {
     height: 3px;
@@ -170,6 +188,51 @@ a, a * {
     margin: 5px;
 }
 
+.header__hidden {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    color: var(--White);
+    background-color: rgba(0,0,0,.5);
+    padding-bottom: .5rem;
+}
+
+.header__hidden .header__item {
+    width: 100%;
+    text-align: right;
+    color: var(--White);
+    padding: 5px 15px;
+}
+
+.header__dropdown {
+    position: absolute;
+    top: 90px;
+    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    transform: translateX(-10px);
+    background-color: rgba(0,0,0,.5);
+}
+
+.header__dropdown .header__item {
+    color: var(--White);
+}
+
+.header__item.profile {
+    display: flex;
+    color: var(--Blue);
+}
+
+.header__item.profile i {
+    margin-left: .5rem;
+    font-size: 1.5rem;
+    color: var(--Blue);
+}
 
 /* ================== FOOTER ================== */
 .footer__container {
@@ -179,7 +242,7 @@ a, a * {
     text-align: center;
 }
 
-/* ================== APP PAGE ================== */
+/* ================== APP HOME PAGE LAYOUT ================== */
 .app__container {
     width: 100vw;
     height: 100vh;
@@ -202,7 +265,6 @@ a, a * {
     width: 80%;
     max-width: 30rem;
 }
-
 
 .form__title { 
     text-transform: lowercase;
@@ -238,7 +300,27 @@ a, a * {
 /* ================== RESPONSIVE ================== */
 
 @media all and (max-width: 1024px) {
+
+    /* form */
     .form__title {
         font-size: 2.1rem;
     }
+
+    /* header */
+    .logo {
+        font-size: 2.5rem !important;
+    }
+
+    .header__item {
+        font-size: 1.1rem;
+    }
+
+    .header__category {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
 }
+

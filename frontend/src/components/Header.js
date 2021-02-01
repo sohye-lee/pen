@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { logout } from '../actions/userActions';
@@ -10,22 +10,32 @@ export default function Header() {
 
     const logoutHandler = () => {
         dispatch(logout());
-    }
+    };
+
+    const [display, setDisplay] = useState("none");
+    const displayToggler = () => {
+        if (display === "none") {
+            setDisplay("flex");
+            setDropdown("none");
+        } else {
+            setDisplay("none");
+        }
+    };
+    const [dropdown, setDropdown] = useState('none');
+    const dropdownToggler = () => {
+        if (dropdown === "none") {
+            setDropdown("flex");
+            setDisplay("none");
+        } else {
+            setDropdown("none");
+        }
+    };
 
     return (
         <div className="header__container row">
             <div className="header__content row between">
-                <div className="header__left row left">
-                    <div className="row left">
+                <div className="header__left">
                         <Link to="/" className="header__item logo">pen</Link>
-                        <Link to="/life" className="header__item">life</Link>
-                        <Link to="/arts" className="header__item">arts</Link>
-                        <Link to="/food" className="header__item">food</Link>
-                        <Link to="/travel" className="header__item">travel</Link>
-                        <Link to="/movies" className="header__item">movies</Link>
-                        <Link to="/books" className="header__item">books</Link>
-                        <Link to="/technologies" className="header__item">technologies</Link>
-                    </div>
                 </div>
                 <div className="header__right row right">
                     <div className="row right">
@@ -34,7 +44,7 @@ export default function Header() {
                         ? 
                         <div className="row right">
                             <div className="header__item row right">
-                                <input type="text" className="form__input"/>
+                                <input type="text" className="form__input search"/>
                                 <i className="fa fa-search" aria-hidden="true"/>
                             </div>
                             <Link className="header__item" to="/login">login</Link>
@@ -43,24 +53,44 @@ export default function Header() {
                         : 
                         <div className="row right">
                             <div className="header__item row right">
-                                <input type="text" className="form__input"/>
+                                <input type="text" className="form__input search"/>
                                 <i className="fa fa-search" aria-hidden="true"/>
                             </div>
-                            <Link className="header__item" style={{color:"var(--Blue)"}} to="/">{userInfo.username}</Link>
-                            <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
+                            <div>
+                                <div 
+                                    className="header__item profile" 
+                                    onClick={dropdownToggler}
+                                >
+                                    {userInfo.username} <i className="fa fa-caret-down "/>
+                                </div>
+                                <div className="header__dropdown" style={{display: dropdown}}>
+                                    <Link className="header__item" to="/profile">profile</Link>
+                                    <Link className="header__item" to="/write">write</Link>
+                                    <Link className="header__item" to="/write">blogs</Link>
+                                    <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
+                                </div>
+                            </div>
                         </div>
                         }
-                        
-                        <div className="header__item bars">
-                            <a href="/">
+                        <div onClick={displayToggler}>
+                            <div>
                                 <div className="header__bar"></div>
                                 <div className="header__bar"></div>
                                 <div className="header__bar"></div>
-                            </a>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
+            </div>
+            <div className="header__hidden" style={{display:display}}>
+                <Link to="/" className="header__item">home</Link>
+                <Link to="/life" className="header__item">life</Link>
+                <Link to="/arts" className="header__item">arts</Link>
+                <Link to="/food" className="header__item">food</Link>
+                <Link to="/travel" className="header__item">travel</Link>
+                <Link to="/movies" className="header__item">movies</Link>
+                <Link to="/books" className="header__item">books</Link>
+                <Link to="/technologies" className="header__item">technologies</Link>
             </div>
         </div>
     )
