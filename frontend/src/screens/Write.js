@@ -34,14 +34,15 @@ export default function Write(props) {
                         id="category"
                         onChange={e => setCategory(e.target.value)}
                     >
-                        <option value="life" disabled={true}>select</option>
+                        <option selected={true} disabled={true}>select category</option>
                         <option value="life">life</option>
-                        <option value="life">arts</option>
-                        <option value="life">food</option>
-                        <option value="life">travel</option>
-                        <option value="life">movies</option>
-                        <option value="life">books</option>
-                        <option value="life">technologies</option>
+                        <option value="arts">arts</option>
+                        <option value="food">food</option>
+                        <option value="travel">travel</option>
+                        <option value="movies">movies</option>
+                        <option value="books">books</option>
+                        <option value="technologies">technologies</option>
+                        <option value="technologies">miscellaneous</option>
                     </select>
                 </div>
                 <div className="row">

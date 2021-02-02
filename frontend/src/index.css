@@ -33,6 +33,11 @@ body {
     background-color: var(--White);
 }
 
+.main {
+    height: 100vh;
+    width: 100vw;
+}
+
 h1 {
     font-size: 2.5rem;
     font-weight: 600;
@@ -47,10 +52,11 @@ a, a * {
     text-decoration: none;
 }
 
-.main {
-    height: 100vh;
-    width: 100vw;
+input, select {
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0;
 }
+
 
 html {
     overflow:   scroll;
@@ -108,6 +114,11 @@ html {
     opacity: 90%;
 }
 
+.btn:hover {
+    opacity: 100%;
+    box-shadow: none;
+}
+
 .btn.small {
     width: 10rem;
     height: 2rem;
@@ -120,9 +131,13 @@ html {
     background-color: var(--Blue);
 }
 
-.btn:hover {
-    opacity: 100%;
-    box-shadow: none;
+.btn.small.main {
+    background-color: var(--DarkGray);
+    margin-bottom: 2rem;
+}
+
+.btn.small.main:hover {
+    background-color: var(--Pink);
 }
 
 .btn__reset, .btn__cancel {
@@ -344,11 +359,7 @@ html {
 
 .content__container {
     width: 100%;
-}
-
-.content__title {
-    width: 100%;
-    background-color: yellow;
+    margin-bottom: 3rem;
 }
 
 .content__img {
@@ -362,12 +373,22 @@ html {
 }
 
 .content__title {
+    width: 100%;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 1.3rem;
+    margin: .3rem 0;
 }
 
-.content__subtitle 
+.content__subtitle {
+    margin: .5rem 0;
+    font-size: 1.1rem;
+    letter-spacing: 0;
+}
+
+.content__text {
+    font-family:'Courier New', Courier, monospace;
+}
 /* ================== FORM ================== */
 .form__content {
     width: 80%;
