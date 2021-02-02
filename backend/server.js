@@ -45,7 +45,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(passport.initialize());
+// app.use(passport.initialize());
 app.use('/index', indexRouter);
 app.use('/users', userRouter);
 app.use('/blogs', blogRouter);
@@ -66,7 +66,7 @@ app.use(function(err, req, res, next) {
     // render the error page
     res.status(err.status || 500);
     res.render('error');
-  });
+});
 
 
 const port = process.env.PORT || 5000;

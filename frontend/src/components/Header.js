@@ -66,7 +66,7 @@ export default function Header() {
                                 <div className="header__dropdown" style={{display: dropdown}}>
                                     <Link className="header__item" to="/profile">profile</Link>
                                     <Link className="header__item" to="/write">write</Link>
-                                    <Link className="header__item" to="/write">blogs</Link>
+                                    <Link className="header__item" to="/blogs">blogs</Link>
                                     <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
                                 </div>
                             </div>

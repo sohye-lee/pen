@@ -14,7 +14,13 @@ blogRouter.route('/')
     .catch(err => next(err));
 })
 .post((req,res,next) => {
-    Blog.create(req.body)
+    Blog.create({
+        author: req.body.author,
+        title: req.body.title,
+        category: req.body.category,
+        description: req.body.description,
+        featured: req.body.featured || false
+    })
     .then(blog => {
         console.log('Blog Created : ', blog);
         res.statusCode = 200;

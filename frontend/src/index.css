@@ -52,9 +52,15 @@ a, a * {
     width: 100vw;
 }
 
+html {
+    overflow:   scroll;
+  }
+  ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent; /* make scrollbar transparent */
+  }
 
-
-/* ================== LAYOUT SETTING ================== */
+/* ================== BASIC LAYOUT ELEMENTS SETTING ================== */
 .row {
     display: flex;
     flex-direction: row;
@@ -102,9 +108,34 @@ a, a * {
     opacity: 90%;
 }
 
+.btn.small {
+    width: 10rem;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.1rem;
+    background-color: var(--LightGray);
+}
+
+.btn.small:hover {
+    background-color: var(--Blue);
+}
+
 .btn:hover {
     opacity: 100%;
     box-shadow: none;
+}
+
+.btn__reset, .btn__cancel {
+    flex-basis: 48%;
+    background-color: var(--Gray);
+}
+
+.btn__reset:hover {
+    background-color: var(--Green);
+}
+
+.btn__cancel:hover {
+    background-color: var(--Pink);
 }
 
 .alert-info {
@@ -121,6 +152,8 @@ a, a * {
     color: var(--Blue);
     background-color: var(--LightGray);
 }
+
+
 
 /* ================== ANIMATIONS ================== */
 .spin {
@@ -199,6 +232,7 @@ a, a * {
     color: var(--White);
     background-color: rgba(0,0,0,.5);
     padding-bottom: .5rem;
+    z-index: 100;
 }
 
 .header__hidden .header__item {
@@ -240,6 +274,7 @@ a, a * {
     height: 60px;
     display: flex;
     text-align: center;
+    border-top: 1px dotted var(--Black);
 }
 
 /* ================== APP HOME PAGE LAYOUT ================== */
@@ -260,6 +295,79 @@ a, a * {
     align-items: center;
 }
 
+.container__full {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: top;
+}
+
+/* ================== SECTION ================== */
+
+.section {
+    position: relative;
+    margin: 1.5rem;
+    margin-right: 2.5rem;
+    display: flex;
+}
+
+.section__big {
+    width: 40%;
+}
+
+.section__title {
+    writing-mode: vertical-lr;
+    max-width: 10rem;
+    transform: rotate(180deg);
+    text-align: right;
+    margin: 1rem;
+    font-size: 1.3rem;
+}
+
+.title__tab {
+    height: 1rem;
+    background-color: var(--Black);
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none; 
+            user-select: none; 
+}
+
+.section__content {
+    height: 100%;
+    overflow-y: scroll;
+    margin: .8rem;
+}
+
+.content__container {
+    width: 100%;
+}
+
+.content__title {
+    width: 100%;
+    background-color: yellow;
+}
+
+.content__img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(100);
+}
+
+.content__container:hover .content__img {
+    filter: grayscale(0);
+}
+
+.content__title {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.content__subtitle 
 /* ================== FORM ================== */
 .form__content {
     width: 80%;
@@ -293,7 +401,7 @@ a, a * {
     margin-top: 1rem;
 }
 
-/* ================== APP PAGE ================== */
+/* ================== MY BLOGS ================== */
 
 
 
@@ -322,5 +430,16 @@ a, a * {
     .hamburger {
         display: block;
     }
+
+    /* section */
+    .section {
+        min-width: 35rem;
+    }
 }
 
+@media all and (max-width: 768px) {
+    /* section */
+    .section {
+        width: 100%;
+    }
+}

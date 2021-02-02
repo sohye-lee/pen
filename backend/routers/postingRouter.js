@@ -5,7 +5,7 @@ const postingRouter = express.Router();
 
 postingRouter.route('/')
 .get((req,res,next) => {
-    Posting.find()
+    Posting.find({ blog: req.body.blogId })
     .populate('comments.author')
     .then(postings => {
         res.statusCode = 200;
