@@ -32,6 +32,7 @@ export default function Write(props) {
                     <select
                         className="form__input"
                         id="category"
+                        value={category}
                         onChange={e => setCategory(e.target.value)}
                     >
                         <option selected={true} disabled={true}>select category</option>
@@ -50,8 +51,8 @@ export default function Write(props) {
                         className="form__input"
                         type="text"
                         id="text"
-                        placeholder="ttext"
-                        value={title}
+                        placeholder="text"
+                        value={text}
                         onChange={e => setText(e.target.value)}
                     />
                 </div>

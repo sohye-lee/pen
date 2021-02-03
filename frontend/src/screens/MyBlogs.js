@@ -5,10 +5,19 @@ import { blogGetList } from '../actions/blogActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
-export default function MyBlogs() {
+export default function MyBlogs(props) {
     const dispatch = useDispatch();
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
     const blogList = useSelector(state => state.blogList);
     const { loading:loadingBlogs, error:errorBlogs, blogs } = blogList
+
+    const myBlogs = blogs ? blogs.length === 1 ? [blogs] : blogs.filter(blog => blog.author === userInfo._id) : null;
+
+    if (!userInfo) {
+        alert('You need to log in!');
+        props.history.push('/login');
+    }
     useEffect(() => {
         dispatch(blogGetList());
     }, [dispatch])
@@ -55,13 +64,13 @@ export default function MyBlogs() {
                 <div className="section__title">my blogs <span className="title__tab">ii</span></div>
                 <div className="section__content">
                     <div className="row right">
-                        <Link to="/addblog">
+                        <Link to="/createblog">
                             <button className="btn small main">new</button>
                         </Link>
                     </div>
                     {loadingBlogs && <Loading />}
                     {errorBlogs && <Message message="error">{errorBlogs}</Message>}
-                    {blogs && blogs.map(blog => renderBlog(blog))}
+                    {myBlogs ? myBlogs.map(blog => renderBlog(blog)) : <h3 className="content__text">0 blog found</h3>}
                 </div>
             </div>
 

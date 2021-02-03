@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { logout } from '../actions/userActions';
@@ -30,6 +30,12 @@ export default function Header() {
             setDropdown("none");
         }
     };
+
+    useEffect(() => {
+        if (userInfo) {
+            setDropdown("none");
+        }
+    }, [userInfo]);
 
     return (
         <div className="header__container row">
@@ -63,10 +69,10 @@ export default function Header() {
                                 >
                                     {userInfo.username} <i className="fa fa-caret-down "/>
                                 </div>
-                                <div className="header__dropdown" style={{display: dropdown}}>
-                                    <Link className="header__item" to="/profile">profile</Link>
-                                    <Link className="header__item" to="/write">write</Link>
-                                    <Link className="header__item" to="/blogs">blogs</Link>
+                                <div className="header__dropdown" style={{display: dropdown}} onClick={() => setDropdown("none")}>
+                                    <Link className="header__item" to="/profile" onClick={() => setDropdown("none")}>profile</Link>
+                                    <Link className="header__item" to="/write" onClick={() => setDropdown("none")}>write</Link>
+                                    <Link className="header__item" to="/blogs" onClick={() => setDropdown("none")}>blogs</Link>
                                     <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
                                 </div>
                             </div>
