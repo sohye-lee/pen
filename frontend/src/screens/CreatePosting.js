@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { createPosting } from '../actions/postingActions';
+import { Editor } from '@tinymce/tinymce-react';
+import { createPosting, postingGetList } from '../actions/postingActions';
 import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { POSTING_CREATE_RESET } from '../constants/postingConstants';
+import { blogGetList } from '../actions/blogActions';
 
 export default function CreatePosting(props) {
     const dispatch = useDispatch();
@@ -56,11 +58,12 @@ export default function CreatePosting(props) {
             dispatch({ type: POSTING_CREATE_RESET });
             props.history.push(`/postings/${postingCreated._id}`);
         }
+        dispatch(blogGetList());
         resetHandler();
     },[dispatch, success, postingCreated, props.history]);
 
     return (
-        <div className="container__center">
+        <div className="container__long">
             <form className="form__content" onSubmit={submitHandler}>
                 <h1 className="form__title">
                     share a new story!
@@ -100,13 +103,24 @@ export default function CreatePosting(props) {
                     </select>
                 </div>
                 <div className="row">
-                    <input
-                        className="form__input"
-                        type="text"
-                        id="text"
-                        placeholder="text"
-                        value={text}
-                        onChange={e => setText(e.target.value)}
+                    <Editor
+                        apiKey="qvo4he5qh12dwnocgj1c6v949spqkch5pk3miy4pfzzch0h5"
+                        initialValue="<p>write your story here.</p>"
+                        init={{
+                        height: 400,
+                        width: 800,
+                        menubar: false,
+                        content_style: 'body { font-family:Courier New, Courier, monospace; font-size:1.1rem }',
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace visualblocks code fullscreen',
+                            'insertdatetime media table paste code help wordcount'
+                        ],
+                        toolbar:
+                            'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+                        }}
+                        onEditorChange={setText}
+                        // outputFormat="text"
                     />
                 </div>
                 <div className="row">

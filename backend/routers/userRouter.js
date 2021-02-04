@@ -116,5 +116,4 @@ userRouter.route('/:userId')
     .catch(err => next(err));
 });
 
-
 export default userRouter;

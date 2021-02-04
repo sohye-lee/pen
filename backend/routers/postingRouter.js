@@ -17,8 +17,8 @@ postingRouter.route('/')
 })
 .post((req,res,next) => {
     Posting.create(req.body)
-    .populate('Blog')
-    .populate('User')
+    .populate('author')
+    .populate('blog')
     .then(posting => {
         console.log('New Posting Created ', posting);
         res.statusCode = 200;
@@ -32,6 +32,7 @@ postingRouter.route('/:postingId')
 .get((req,res,next) => {
     Posting.findById(req.params.postingId)
     .populate('author')
+    .populate('blog')
     .populate('comments.author')
     .then(posting => {
         res.statusCode = 200;

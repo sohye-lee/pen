@@ -6,7 +6,9 @@ import {
   blogListReducer 
 } from './reducers/blogReducers';
 import { 
-  postingCreateReducer, postingListReducer 
+  postingCreateReducer, 
+  postingDeleteReducer, 
+  postingListReducer 
 } from './reducers/postingReducers';
 import { 
   userLoginReducer, 
@@ -34,6 +36,7 @@ const reducer = combineReducers({
     blogDelete: blogDeleteReducer,
     postingList: postingListReducer,
     postingCreate: postingCreateReducer,
+    postingDelete: postingDeleteReducer,
 
 });
 
