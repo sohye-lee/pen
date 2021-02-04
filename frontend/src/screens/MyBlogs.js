@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { blogGetList } from '../actions/blogActions';
+import { blogGetList, deleteBlog } from '../actions/blogActions';
+import { postingGetList } from '../actions/postingActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
@@ -10,31 +11,45 @@ export default function MyBlogs(props) {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const blogList = useSelector(state => state.blogList);
-    const { loading:loadingBlogs, error:errorBlogs, blogs } = blogList
-
-    const myBlogs = blogs ? blogs.length === 1 ? [blogs] : blogs.filter(blog => blog.author === userInfo._id) : null;
+    const { loading:loadingBlogs, error:errorBlogs, blogs } = blogList;
+    const postingList = useSelector(state => state.postingList);
+    const { loading:loadingPostings, postings, error:errorPostings } = postingList;
+    const blogDelete = useSelector(state => state.blogDelete);
+    const { success: successDelete } = blogDelete;
+ 
+    const myBlogs = blogs ? blogs.length === 1 ? [blogs] : blogs.filter(blog => blog.author._id === userInfo._id) : null;
+    const myPostings = postings ? postings.filter(posting => posting.author._id === userInfo._id) : null;
+    
+    const deleteBlogHandler = (blog) => {
+        if (window.confirm(`Are you sure you wish to delete '${blog.title}?'`)) {
+            dispatch(deleteBlog(blog._id));
+        }
+    }
 
     if (!userInfo) {
         alert('You need to log in!');
         props.history.push('/login');
     }
+     
     useEffect(() => {
         dispatch(blogGetList());
-    }, [dispatch])
+        dispatch(postingGetList());
+    }, [dispatch, successDelete])
     
 
     const renderBlog = (blog) => (
-        <div className="content__container">
+        <div className="content__container" key={blog._id}>
             <img className="content__img" src="/noimage.jpg" alt="sectionimage"/>    
             <h3 className="content__title">{blog.title}</h3>
             <div className="row between content__subtitle">
-                <p className="">- {blog.category}</p>
+                <p className="content__category">{blog.category}</p>
                 <p>follow 0</p>
             </div>
             <div className="content__subtitle">
                 <h4 className="content__text">{blog.description}</h4>
             </div>
-            <Link to={`/blogs/${blog._id}`}></Link><button className="btn small">see more</button>
+            <Link to={`/blogs/${blog._id}`}><button className="btn small margin__right__small">see more</button></Link>
+            <button className="btn small btn__red" onClick={() => deleteBlogHandler(blog._id)}>delete</button>
         </div>
     );
 
@@ -53,7 +68,8 @@ export default function MyBlogs(props) {
                     <span>#{hashtag} </span>
                 ))}</p>
             </div>
-            <button className="btn small">see more</button>
+            <Link to={`/blogs/${posting._id}`}><button className="btn small">see more</button></Link>
+            <button className="btn small delete">delete</button>
         </div>
     )
 
@@ -83,19 +99,9 @@ export default function MyBlogs(props) {
                         </Link>
                     </div>
                     <div className="content__container">
-                        <img className="content__img" src="/noimage.jpg" alt="sectionimage"/>
-                        <h3 className="content__title">blog title</h3>
-                        <h4 className="content__subtitle">category</h4>
-                        <h3 className="content__text">
-                            description is here <br />
-                            description is here <br />
-                            description is here <br />
-                        </h3>
-                        <div className="content__additional">
-                            <p>follow 0</p>
-                            <p>#hashtag #hashtag #hashtag #hashtag #hashtag</p>
-                        </div>
-                        <button className="btn small">see more</button>
+                        {loadingPostings && <Loading />}
+                        {errorPostings && <Message message="error">{errorPostings}</Message>}
+                        {myPostings && myPostings.map(posting => renderPosting(posting))}
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import Login from './screens/Login';
 import MyBlogs from './screens/MyBlogs';
 import Profile from './screens/Profile';
 import Signup from './screens/Signup';
-import Write from './screens/Write';
+import CreatePosting from './screens/CreatePosting';
 
 export default function App() {
     
@@ -21,7 +21,7 @@ export default function App() {
                     <Route path="/profile" component={Profile} />
                     <Route path="/blogs" component={MyBlogs} />
                     <Route path="/createblog" component={CreateBlog} exact={true}/>
-                    <Route path="/write" component={Write} />
+                    <Route path="/write" component={CreatePosting} />
                 </div>
                 <Footer />
             </div>

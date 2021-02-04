@@ -5,7 +5,8 @@ const blogRouter = express.Router();
 
 blogRouter.route('/')
 .get((req,res,next) => {
-    Blog.find()
+    Blog.find({})
+    .populate('author')
     .then(blogs => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

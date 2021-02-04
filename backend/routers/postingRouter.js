@@ -5,7 +5,9 @@ const postingRouter = express.Router();
 
 postingRouter.route('/')
 .get((req,res,next) => {
-    Posting.find({ blog: req.body.blogId })
+    Posting.find()
+    .populate('author')
+    .populate('blog')
     .populate('comments.author')
     .then(postings => {
         res.statusCode = 200;
@@ -15,6 +17,8 @@ postingRouter.route('/')
 })
 .post((req,res,next) => {
     Posting.create(req.body)
+    .populate('Blog')
+    .populate('User')
     .then(posting => {
         console.log('New Posting Created ', posting);
         res.statusCode = 200;
@@ -27,6 +31,7 @@ postingRouter.route('/')
 postingRouter.route('/:postingId')
 .get((req,res,next) => {
     Posting.findById(req.params.postingId)
+    .populate('author')
     .populate('comments.author')
     .then(posting => {
         res.statusCode = 200;

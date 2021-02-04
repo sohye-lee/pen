@@ -1,6 +1,13 @@
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { blogCreateReducer, blogListReducer } from './reducers/blogReducers';
+import { 
+  blogCreateReducer, 
+  blogDeleteReducer, 
+  blogListReducer 
+} from './reducers/blogReducers';
+import { 
+  postingCreateReducer, postingListReducer 
+} from './reducers/postingReducers';
 import { 
   userLoginReducer, 
   userProfileReducer, 
@@ -10,7 +17,7 @@ import {
 
 
 const initialState = {
-  userSignin: {
+  userLogin: {
     userInfo: localStorage.getItem('userInfo')
       ? JSON.parse(localStorage.getItem('userInfo'))
       :null
@@ -24,6 +31,10 @@ const reducer = combineReducers({
     userUpdate: userUpdateReducer,
     blogList: blogListReducer,
     blogCreate: blogCreateReducer,
+    blogDelete: blogDeleteReducer,
+    postingList: postingListReducer,
+    postingCreate: postingCreateReducer,
+
 });
 
 

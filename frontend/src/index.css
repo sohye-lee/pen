@@ -98,6 +98,10 @@ html {
     align-items: center;
 }
 
+.margin__right__small {
+    margin-right: 1rem !important;
+}
+
 .btn {
     width: 100%;
     margin: .5rem 0;
@@ -149,9 +153,10 @@ html {
     background-color: var(--Green);
 }
 
-.btn__cancel:hover {
-    background-color: var(--Pink);
+.btn__cancel:hover, .btn__red:hover {
+    background-color: var(--Red) !important;
 }
+
 
 .alert-info {
     color: var(--Green);
@@ -381,10 +386,14 @@ html {
     margin: .3rem 0;
 }
 
-.content__subtitle {
+.content__subtitle * {
     margin: .5rem 0;
     font-size: 1.1rem;
     letter-spacing: 0;
+}
+
+.content__category {
+    text-transform: uppercase;
 }
 
 .content__text {

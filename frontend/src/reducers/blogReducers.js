@@ -3,6 +3,9 @@ import {
     BLOG_CREATE_REQUEST,
     BLOG_CREATE_RESET,
     BLOG_CREATE_SUCCESS,
+    BLOG_DELETE_FAIL,
+    BLOG_DELETE_REQUEST,
+    BLOG_DELETE_SUCCESS,
     BLOG_LIST_FAIL, BLOG_LIST_REQUEST, BLOG_LIST_SUCCESS
 } from "../constants/blogConstants";
 
@@ -29,6 +32,19 @@ export const blogCreateReducer = (state = {}, action) => {
             return { loading: false, error: action.payload };
         case BLOG_CREATE_RESET:
             return {};
+        default:
+            return state;
+    }
+};
+
+export const blogDeleteReducer = (state = {}, action) => {
+    switch(action.type) {
+        case BLOG_DELETE_REQUEST:
+            return { loading: true };
+        case BLOG_DELETE_SUCCESS:
+            return { loading: false, success: true };
+        case BLOG_DELETE_FAIL:
+             return { loading: false, error: action.payload };
         default:
             return state;
     }
