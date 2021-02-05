@@ -8,6 +8,7 @@ import MyBlogs from './screens/MyBlogs';
 import Profile from './screens/Profile';
 import Signup from './screens/Signup';
 import CreatePosting from './screens/CreatePosting';
+import Blog from './screens/Blog';
 
 export default function App() {
     
@@ -19,9 +20,11 @@ export default function App() {
                     <Route path="/signup" component={Signup} />
                     <Route path="/login" component={Login} />
                     <Route path="/profile" component={Profile} />
-                    <Route path="/blogs" component={MyBlogs} />
-                    <Route path="/createblog" component={CreateBlog} exact={true}/>
+                    <Route path="/blogs" component={MyBlogs} exact />
+                    <Route path="/createblog" component={CreateBlog}/>
                     <Route path="/write" component={CreatePosting} />
+                    <Route path="/blogs/:blogId" component={Blog} />
+                    
                 </div>
                 <Footer />
             </div>

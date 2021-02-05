@@ -5,35 +5,35 @@ const followRouter = express.Router();
 
 followRouter.route('/')
 .get((req, res, next) => {
-    Follow.findOne({ user: req.user._id })
-    .then(follow => {
+    Follow.find()
+    .then(follows => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(follow.blogs);
+        res.json(follows);
     })
     .catch(err => next(err));
 })
 .post((req, res, next) => {
-    Follow.findOne({ user: req.user._id })
+    Follow.findOne({ user: req.body.user })
     .then(follow => {
         if (!follow) {
             Follow.create({
-                user: req.user._id,
-                blogs: [req.body._id]
+                user: req.body.user,
+                blogs: [req.body.blog]
             })
             .then(follow => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json(follow);
-                res.end('Follow created!');
             })
             .catch(err => next(err));
         } else {
-            req.body.forEach(fol => {
-                if (!follow.blogs.includes(fol._id)) {
-                    follow.blogs.push(fol._id);
-                }
-            })
+            // req.body.forEach(fol => {
+            //     if (!follow.blogs.includes(fol._id)) {
+            //         follow.blogs.push(fol._id);
+            //     }
+            // })
+            follow.blogs.push(req.body.blog);
             follow.save()
             .then(follow => {
                 res.statusCode = 200;
@@ -64,7 +64,7 @@ followRouter.route('/:blogId')
     res.end(`The operation not supported on /follows/${blogId}`);
 })
 .post((req, res, next) => {
-    Follow.findOne({ user: req.user._id })
+    Follow.findOne({ user: req.body.user })
     .then(follow => {
         if (follow) {
             if (!follow.blogs.includes(req.params.blogId)) {

@@ -3,8 +3,13 @@ import thunk from 'redux-thunk';
 import { 
   blogCreateReducer, 
   blogDeleteReducer, 
+  blogDetailsReducer, 
   blogListReducer 
 } from './reducers/blogReducers';
+import { 
+  followAddReducer,
+  followListReducer 
+} from './reducers/followReducers';
 import { 
   postingCreateReducer, 
   postingDeleteReducer, 
@@ -32,12 +37,14 @@ const reducer = combineReducers({
     userProfile: userProfileReducer,
     userUpdate: userUpdateReducer,
     blogList: blogListReducer,
+    blogDetails: blogDetailsReducer,
     blogCreate: blogCreateReducer,
     blogDelete: blogDeleteReducer,
     postingList: postingListReducer,
     postingCreate: postingCreateReducer,
     postingDelete: postingDeleteReducer,
-
+    followList: followListReducer,
+    followAdd: followAddReducer,
 });
 
 

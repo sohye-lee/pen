@@ -2,16 +2,28 @@ import Axios from "axios"
 import { 
     BLOG_CREATE_FAIL, BLOG_CREATE_REQUEST, BLOG_CREATE_SUCCESS, 
     BLOG_DELETE_FAIL, BLOG_DELETE_REQUEST, BLOG_DELETE_SUCCESS, 
+    BLOG_DETAILS_FAIL, 
+    BLOG_DETAILS_REQUEST, 
+    BLOG_DETAILS_SUCCESS, 
     BLOG_LIST_FAIL, BLOG_LIST_REQUEST, BLOG_LIST_SUCCESS } from "../constants/blogConstants";
 
 export const blogGetList = () => async(dispatch) => {
     dispatch({ type: BLOG_LIST_REQUEST });
-
     try {
         const { data } = await Axios.get('/blogs');
         dispatch({ type: BLOG_LIST_SUCCESS, payload: data });
     } catch(error) {
         dispatch({ type: BLOG_LIST_FAIL, payload: error.message });
+    }
+};
+
+export const getBlogDetails = (blogId) => async(dispatch) => {
+    dispatch({ type: BLOG_DETAILS_REQUEST, payload: blogId });
+    try {
+        const { data } = await Axios.get(`/blogs/${blogId}`);
+        dispatch({ type: BLOG_DETAILS_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: BLOG_DETAILS_FAIL, payload: error.message });
     }
 };
 

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { blogGetList, deleteBlog } from '../actions/blogActions';
+import { getFollows } from '../actions/followActions';
 import { deletePosting, postingGetList } from '../actions/postingActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
@@ -18,6 +19,8 @@ export default function MyBlogs(props) {
     const { loading: loadingBlogDelete, success: successBlogDelete, error: errorBlogDelete } = blogDelete;
     const postingDelete = useSelector(state => state.postingDelete);
     const { loading: loadingPostingDelete, success: successPostingDelete, error: errorPostingDelete } = postingDelete;
+    const followList = useSelector(state => state.followList);
+    const { follows } = followList;
  
     const myBlogs = blogs ? blogs.length === 1 ? [blogs] : blogs.filter(blog => blog.author._id === userInfo._id) : null;
     const myPostings = postings ? postings.filter(posting => posting.author._id === userInfo._id) : null;
@@ -42,57 +45,79 @@ export default function MyBlogs(props) {
     useEffect(() => {
         dispatch(blogGetList());
         dispatch(postingGetList());
+        dispatch(getFollows());
     }, [dispatch, successBlogDelete, successPostingDelete])
     
 
-    const renderBlog = (blog) => (
-        <div className="content__container" key={blog._id}>
-            <img className="content__img" src="/noimage.jpg" alt="sectionimage"/>    
-            <h3 className="content__title">{blog.title}</h3>
-            <div className="row between content__subtitle">
-                <p className="content__category">{blog.category}</p>
-                <p>follow 0</p>
+    const renderBlog = (blog) => {
+        const myFollows = follows ? follows.filter(follow => follow.blogs.includes(blog._id)) : [];
+        const myFollowNum = myFollows.length;
+        return (
+            <div className="content__container" key={blog._id}>
+                <img className="content__img" src="/noimage.jpg" alt="sectionimage"/> 
+                <div className="content__subtitle">
+                    <p className="content__category">TOPIC/ {blog.category}</p>
+                </div>
+                <h3 className="content__title">{blog.title}</h3>
+                <div className="row right content__subtitle">
+                    <p>{myFollowNum > 1 ? myFollowNum + ' followers' : myFollowNum + ' follower'}</p>
+                </div>
+                <div className="content__subtitle">
+                    <h4 className="content__text">{blog.description}</h4>
+                </div>
+                <Link to={`/blogs/${blog._id}`}>
+                    <button className="btn small margin__right__small">see more</button>
+                </Link>
+                <button className="btn small btn__red" onClick={() => deleteBlogHandler(blog._id)}>
+                    delete
+                </button>
+                {loadingBlogDelete && <Loading />}
+                {errorBlogDelete && <Message message="error">{errorBlogDelete}</Message>}
             </div>
-            <div className="content__subtitle">
-                <h4 className="content__text">{blog.description}</h4>
-            </div>
-            <Link to={`/blogs/${blog._id}`}><button className="btn small margin__right__small">see more</button></Link>
-            <button className="btn small btn__red" onClick={() => deleteBlogHandler(blog._id)}>delete</button>
-            {loadingBlogDelete && <Loading />}
-            {errorBlogDelete && <Message message="error">{errorBlogDelete}</Message>}
-        </div>
-    );
+        )
+    };
 
-    const renderPosting = (posting) => (
-        <div className="content__container">
-            <img className="content__img" src="/noimage.jpg" alt="sectionimage"/>    
-            <h3 className="content__title">{posting.title}</h3>
-            <div className="row between content__subtitle">
-                <h4 className="content__category">{posting.category}</h4>
-                <div className="row right">
-                    <p className="margin__right__small">follow 0</p>
+    const renderPosting = (posting) => {
+        const postingTextShort = posting.text.length > 200 ? posting.text.substring(0,200)+'...' : posting.text;
+        return (
+            <div className="content__container" key={posting._id}>
+                <img className="content__img" src="/noimage.jpg" alt="sectionimage"/> 
+                <div className="content__subtitle">
+                    <h4 className="content__category">{posting.category}</h4>
+                </div>   
+                <h3 className="content__title">{posting.title}</h3>
+                <div className="row right content__subtitle">
                     <p>{posting.like} liked</p>
                 </div>
+                <div className="content__subtitle">
+                    <h4 className="content__text row left">
+                        <span 
+                            dangerouslySetInnerHTML={{
+                                __html:postingTextShort
+                            }}
+                        />
+            
+                    </h4>
+                </div>
+                <div className="content__subitle">
+                    <p>{posting.hashtags && posting.hashtags.map(hashtag => (
+                        <span key={hashtag}>#{hashtag} </span>
+                    ))}</p>
+                </div>
+                <div className="content__buttons">
+                    <Link to={`/blogs/${posting._id}`}>
+                        <button className="btn small margin__right__small">see more</button>
+                    </Link>
+                    <button className="btn small delete" onClick={() => deletePostingHandler(posting)}>
+                        delete
+                    </button>
+                </div>
+                
+                {loadingPostingDelete && <Loading />}
+                {errorPostingDelete && <Message message="error">{errorPostingDelete}</Message>}
             </div>
-            <div className="content__subtitle">
-                <h4
-                    className="content__text"
-                    style={{fontFamily: 'Courier New, Courier, monospace'}}
-                    dangerouslySetInnerHTML={{
-                        __html: posting.text
-                    }}></h4>
-            </div>
-            <div className="content__subitle">
-                <p>{posting.hashtags && posting.hashtags.map(hashtag => (
-                    <span>#{hashtag} </span>
-                ))}</p>
-            </div>
-            <Link to={`/blogs/${posting._id}`}><button className="btn small margin__right__small">see more</button></Link>
-            <button className="btn small delete" onClick={() => deletePostingHandler(posting)}>delete</button>
-            {loadingPostingDelete && <Loading />}
-            {errorPostingDelete && <Message message="error">{errorPostingDelete}</Message>}
-        </div>
-    )
+        )
+    }
 
     
     return (
@@ -102,12 +127,14 @@ export default function MyBlogs(props) {
                 <div className="section__content">
                     <div className="row right">
                         <Link to="/createblog">
-                            <button className="btn small main">new</button>
+                            <button className="btn small main">+ add</button>
                         </Link>
                     </div>
-                    {loadingBlogs && <Loading />}
-                    {errorBlogs && <Message message="error">{errorBlogs}</Message>}
-                    {myBlogs ? myBlogs.map(blog => renderBlog(blog)) : <h3 className="content__text">0 blog found</h3>}
+                    {loadingBlogs 
+                    ? <Loading />
+                    : errorBlogs  
+                    ? <Message message="error">{errorBlogs}</Message>
+                    : myBlogs ? myBlogs.map(blog => renderBlog(blog)) : <h3 className="content__text">0 blog found</h3>}
                 </div>
             </div>
 
@@ -116,13 +143,15 @@ export default function MyBlogs(props) {
                 <div className="section__content">
                     <div className="row right">
                         <Link to="/write">
-                            <button className="btn small main">new</button>
+                            <button className="btn small main">+ add</button>
                         </Link>
                     </div>
                     <div className="content__container">
-                        {loadingPostings && <Loading />}
-                        {errorPostings && <Message message="error">{errorPostings}</Message>}
-                        {myPostings && myPostings.map(posting => renderPosting(posting))}
+                        {loadingPostings ? <Loading /> :
+                        errorPostings ? <Message message="error">{errorPostings}</Message> :
+                        myPostings && myPostings.length > 0
+                        ? myPostings.map(posting => renderPosting(posting))
+                        :<h3 className="content__text">0 posting found</h3>}
                     </div>
                 </div>
             </div>

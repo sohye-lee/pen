@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '@tinymce/tinymce-react';
-import { createPosting, postingGetList } from '../actions/postingActions';
+import { createPosting } from '../actions/postingActions';
 import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { POSTING_CREATE_RESET } from '../constants/postingConstants';
 import { blogGetList } from '../actions/blogActions';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default function CreatePosting(props) {
     const dispatch = useDispatch();

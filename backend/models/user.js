@@ -16,6 +16,14 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    introduction: {
+        type: String,
+        default: ''
+    },
+    image: {
+        type: String,
+        default: '/user.png'
+    },
     isAdmin: {
         type: Boolean,
         default: false
