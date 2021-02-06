@@ -5,7 +5,7 @@ import {
     BLOG_DETAILS_FAIL, 
     BLOG_DETAILS_REQUEST, 
     BLOG_DETAILS_SUCCESS, 
-    BLOG_LIST_FAIL, BLOG_LIST_REQUEST, BLOG_LIST_SUCCESS } from "../constants/blogConstants";
+    BLOG_LIST_FAIL, BLOG_LIST_REQUEST, BLOG_LIST_SUCCESS, BLOG_UPDATE_FAIL, BLOG_UPDATE_REQUEST, BLOG_UPDATE_SUCCESS } from "../constants/blogConstants";
 
 export const blogGetList = () => async(dispatch) => {
     dispatch({ type: BLOG_LIST_REQUEST });
@@ -41,6 +41,25 @@ export const createBlog = (title, category, description, image) => async(dispatc
         dispatch({ type: BLOG_CREATE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: BLOG_CREATE_FAIL, payload: error.message });
+    }
+};
+
+export const updateBlog = (blogId, title, category, description, image) => async(dispatch, getState) => {
+    const { userLogin: { userInfo } } = getState();
+    dispatch({ type: BLOG_UPDATE_REQUEST, payload: {
+        title, category, description, image
+    }});
+    try {
+        const { data } = await Axios.put(`/blogs/${blogId}`, {
+            title, category, description, image
+        }, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        });
+        dispatch({ type: BLOG_UPDATE_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: BLOG_UPDATE_FAIL, paylaod: error.message });
     }
 };
 

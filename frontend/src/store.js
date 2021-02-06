@@ -4,7 +4,8 @@ import {
   blogCreateReducer, 
   blogDeleteReducer, 
   blogDetailsReducer, 
-  blogListReducer 
+  blogListReducer, 
+  blogUpdateReducer
 } from './reducers/blogReducers';
 import { 
   followAddReducer,
@@ -13,7 +14,9 @@ import {
 import { 
   postingCreateReducer, 
   postingDeleteReducer, 
-  postingListReducer 
+  postingDetailsReducer, 
+  postingListReducer, 
+  postingUpdateReducer
 } from './reducers/postingReducers';
 import { 
   userLoginReducer, 
@@ -39,9 +42,12 @@ const reducer = combineReducers({
     blogList: blogListReducer,
     blogDetails: blogDetailsReducer,
     blogCreate: blogCreateReducer,
+    blogUpdate: blogUpdateReducer,
     blogDelete: blogDeleteReducer,
     postingList: postingListReducer,
+    postingDetails: postingDetailsReducer,
     postingCreate: postingCreateReducer,
+    postingUpdate: postingUpdateReducer,
     postingDelete: postingDeleteReducer,
     followList: followListReducer,
     followAdd: followAddReducer,

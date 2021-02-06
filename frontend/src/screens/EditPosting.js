@@ -1,33 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '@tinymce/tinymce-react';
-import { createPosting } from '../actions/postingActions';
+import { getPostingDetails, updatePosting } from '../actions/postingActions';
 import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-import { POSTING_CREATE_RESET } from '../constants/postingConstants';
 import { blogGetList } from '../actions/blogActions';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default function CreatePosting(props) {
+export default function EditPosting(props) {
     const dispatch = useDispatch();
-    const [title, setTitle] = useState('');
-    const [blog, setBlog] = useState('');
-    const [category, setCategory] = useState('');
-    const [text, setText] = useState('');
-    const [image, setImage] = useState(['']);
-    const [hashtags, setHashtags] = useState(['']);
-    const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
-
-    const blogList = useSelector(state => state.blogList);
-    const { blogs } = blogList;
+    const postingId = props.match.params.postingId;
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
+    const postingDetails = useSelector(state => state.postingDetails);
+    const { loading, error, success, posting } = postingDetails;
+    const blogList = useSelector(state => state.blogList);
+    const { blogs } = blogList;
     const myblogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
-    const postingCreate = useSelector(state => state.postingCreate);
-    const { loading, success, posting: postingCreated, error } = postingCreate;
+
+
+
+    const [title, setTitle] = useState(posting ? posting.title : '');
+    const [blog, setBlog] = useState(posting ? posting.blog._id : '');
+    const [category, setCategory] = useState(posting ? posting.category : '');
+    const [text, setText] = useState(posting ? posting.text : '');
+    const [image, setImage] = useState(posting ? posting.image : '');
+    const [hashtags, setHashtags] = useState(posting ? posting.hashtags.join(',').toString()  : '');
+    const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
+
+    const redirectPath = props.location.search 
+        ? props.location.search.split('=')[1]
+        : '/';
+
+
     const categories = CATEGORIES.map(category => (
         <option value={category} key={category}>{category}</option>
     ));
@@ -39,43 +47,45 @@ export default function CreatePosting(props) {
     : <option value={null} disabled={true}>No Blog. You need to created a blog first.</option>
     
     const resetHandler = () => {
-        setTitle('');
-        setBlog('');
-        setCategory('');
-        setText('');
-        setImage('');
-        setHashtags(['']);
+        setTitle(posting ? posting.title : '');
+        setBlog(posting ? posting.blog._id : '');
+        setCategory(posting ? posting.category : '');
+        setText(posting ? posting.text : '');
+        setImage(posting ? posting.image : '');
+        setHashtags(posting ? posting.hashtags.join(',').toString() : '');
     };
 
     const submitHandler = () => {
         const hashList = makeHashList(hashtags);
-        dispatch(createPosting(title, blog, category, text, image, hashList));
-        alert('Your new story has been successfully created!');
+        dispatch(updatePosting({_id: postingId, title, blog, category, text, image, hashtags: hashList}));
+        if (success) {
+            alert('Your story has been successfully updated!');
+        }
     };
     
     useEffect(() => {
+
         if (!userInfo) {
             alert('You need to login!');
             props.history.push('/login');
         }
-
+        dispatch(getPostingDetails(postingId));
         dispatch(blogGetList());
         resetHandler();
         
         if (success) {
-            resetHandler();
-            dispatch({ type: POSTING_CREATE_RESET });
-            props.history.push(`/postings/${postingCreated._id}`);
+   
+            props.history.push(`/postings/${posting._id}`);
         }
 
-        if (myblogs)  {
-            if (myblogs.length === 0) {
-                alert('You need to create a blog before writing!');
-                props.history.push('/createblog');
-            }
-        }
+        // if (myblogs)  {
+        //     if (myblogs.length === 0) {
+        //         alert('You need to create a blog before writing!');
+        //         props.history.push('/createblog');
+        //     }
+        // }
         
-    },[dispatch, success, postingCreated, props.history, userInfo]);
+    },[dispatch, success, props.history, userInfo]);
 
     return (
         <div className="container__long">
@@ -108,12 +118,12 @@ export default function CreatePosting(props) {
                 </div>
                 <div className="row">
                     <select
-                        className="form__input"
-                        id="category"
-                        value={category}
-                        onChange={e => setCategory(e.target.value)}
+                            className="form__input"
+                            id="category"
+                            onChange={e => setCategory(e.target.value)}
+                            value={category}
                     >
-                        <option defaultValue={true} value=''>select category</option>
+                        <option defaultValue={true} value="">select category</option>
                         {categories}
                     </select>
                 </div>
@@ -158,18 +168,20 @@ export default function CreatePosting(props) {
                         onChange={e => setHashtags(e.target.value)}
                     />
                 </div>
-                <button 
+                <div className="row">
+                    <button 
                         className="form__btn btn" 
                         type="submit" disabled={
                             blog === '' ? true : false
                         }
                         style={{backgroundColor: blog === '' ? 'var(--Gray)' : 'var(--Blue)'}}
                     >
-                        post this story
+                        update this story
                     </button>
+                </div>
                 <div className="row between">
                     <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
-                    <button className="btn btn__cancel" onClick={e => props.history.push('/')}>cancel</button>
+                    <button className="btn btn__cancel" onClick={e => props.history.push(redirectPath)}>cancel</button>
                 </div>
                 
             </form>

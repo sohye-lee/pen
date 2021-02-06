@@ -12,7 +12,7 @@ export default function MyBlogs(props) {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const blogList = useSelector(state => state.blogList);
-    const { loading:loadingBlogs, error:errorBlogs, blogs } = blogList;
+    const { loading: loadingBlogs, error: errorBlogs, blogs } = blogList;
     const postingList = useSelector(state => state.postingList);
     const { loading:loadingPostings, postings, error:errorPostings } = postingList;
     const blogDelete = useSelector(state => state.blogDelete);
@@ -21,13 +21,21 @@ export default function MyBlogs(props) {
     const { loading: loadingPostingDelete, success: successPostingDelete, error: errorPostingDelete } = postingDelete;
     const followList = useSelector(state => state.followList);
     const { follows } = followList;
- 
-    const myBlogs = blogs ? blogs.length === 1 ? [blogs] : blogs.filter(blog => blog.author._id === userInfo._id) : null;
+    const myBlogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
     const myPostings = postings ? postings.filter(posting => posting.author._id === userInfo._id) : null;
-    
+  
+  
     const deleteBlogHandler = (blog) => {
         if (window.confirm(`Are you sure you wish to delete "${blog.title.toUpperCase()}"?`)) {
             dispatch(deleteBlog(blog._id));
+            if (postings) {
+                const blogPostings = postings.filter(posting => posting.blog._id === blog._id);
+                if (blogPostings) {
+                    blogPostings.forEach(posting => {
+                    dispatch(deletePosting(posting._id))
+                    }
+                )}
+            } 
         }
     };
 
@@ -37,18 +45,21 @@ export default function MyBlogs(props) {
         }
     };
 
-    if (!userInfo) {
-        alert('You need to log in!');
-        props.history.push('/login');
-    };
-     
     useEffect(() => {
+        if (!userInfo) {
+            alert('You need to log in!');
+            props.history.push('/login');
+        }
+
         dispatch(blogGetList());
         dispatch(postingGetList());
         dispatch(getFollows());
-    }, [dispatch, successBlogDelete, successPostingDelete])
+        
+    }, [userInfo, dispatch, successBlogDelete, successPostingDelete, props.history])
     
 
+   
+     
     const renderBlog = (blog) => {
         const myFollows = follows ? follows.filter(follow => follow.blogs.includes(blog._id)) : [];
         const myFollowNum = myFollows.length;
@@ -68,7 +79,7 @@ export default function MyBlogs(props) {
                 <Link to={`/blogs/${blog._id}`}>
                     <button className="btn small margin__right__small">see more</button>
                 </Link>
-                <button className="btn small btn__red" onClick={() => deleteBlogHandler(blog._id)}>
+                <button className="btn small btn__red" onClick={() => deleteBlogHandler(blog)}>
                     delete
                 </button>
                 {loadingBlogDelete && <Loading />}
@@ -86,6 +97,7 @@ export default function MyBlogs(props) {
                     <h4 className="content__category">{posting.category}</h4>
                 </div>   
                 <h3 className="content__title">{posting.title}</h3>
+                <h5>in <span className="italic">{posting.blog.title}</span></h5>
                 <div className="row right content__subtitle">
                     <p>{posting.like} liked</p>
                 </div>
@@ -134,7 +146,7 @@ export default function MyBlogs(props) {
                     ? <Loading />
                     : errorBlogs  
                     ? <Message message="error">{errorBlogs}</Message>
-                    : myBlogs ? myBlogs.map(blog => renderBlog(blog)) : <h3 className="content__text">0 blog found</h3>}
+                    : myBlogs && myBlogs.length>0 ? myBlogs.map(blog => renderBlog(blog)) : <h3 className="content__text">0 blog found</h3>}
                 </div>
             </div>
 

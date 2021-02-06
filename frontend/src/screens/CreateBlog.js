@@ -47,7 +47,7 @@ export default function CreateBlog(props) {
             setCategory('');
             setDescription('');
             setImage('');
-            props.history.push(`/blogs/${blogCreated._id}`);
+            props.history.push(`/blogs`);
         }
     }, [dispatch, success, props.history, userInfo, blogCreated])
 

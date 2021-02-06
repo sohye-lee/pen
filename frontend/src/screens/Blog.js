@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { getBlogDetails } from '../actions/blogActions';
 import { addFollow, getFollows } from '../actions/followActions';
-import { postingGetList } from '../actions/postingActions';
+import { deletePosting, postingGetList } from '../actions/postingActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { RenderDate } from '../components/RenderDate';
@@ -17,37 +17,62 @@ export default function Blog(props) {
     const { loading, blog, error } = blogDetails;
     const postingList = useSelector(state => state.postingList);
     const { postings, loading: loadingPostings, error: errorPostings } = postingList;
-    const myPostings = postings ? postings.filter(posting => posting.blog._id === blogId): [];
+    const postingDelete = useSelector(state => state.postingDelete);
+    const { success: postingDeleteSuccess } = postingDelete;
+    const myPostings = postings && postings.filter(posting => posting.blog._id === blogId);
     const followList = useSelector(state => state.followList);
     const { follows } = followList;
     const blogFollows = follows ? follows.filter(follow => follow.blogs.includes(blogId)) : [];
     const followAdd = useSelector(state => state.followAdd);
     const { success: successFollowAdd } = followAdd;
 
+    const followHandler = () => {
+        dispatch(addFollow(blogId));
+    };
+
+    const editHandler = () => {
+        props.history.push(`/blogs/${blogId}/edit`)
+    };
+
+    const deletePostingHandler = (posting) => {
+        if (window.confirm(`Are you sure you wish to delete "${posting.title}"?`)) {
+            dispatch(deletePosting(posting._id))
+        } 
+        props.history.push(`/blogs`)
+    };
+
     const renderPosting = (posting) => {
-        const date = new Date(posting.updatedAt ? posting.updatedAt : posting.createdAt);
+        const date = new Date(posting.updatedAt !== posting.createdAt ? posting.updatedAt : posting.createdAt);
         const dateInText = RenderDate(date);
 
         return (
             <Link to={`/postings/${posting._id}`}>
                 <div className="grid__item">
-                    <h2 className="grid__item__title">{posting.title}</h2>
-                    <h4 className="grid__item__subtitle content__text">{posting.updatedAt ? 'updated on '+dateInText : 'written on '+dateInText}</h4>
+                    <h2 className="grid__item__title content__title">{posting.title}</h2>
+                    <h4 className="grid__item__subtitle content__text">{posting.updatedAt !== posting.createdAt ? 'updated on '+dateInText : 'written on '+dateInText}</h4>
                     <img src={posting.image} alt={posting.title} className="grid__item__img"/>
+                    <h4 className="content__text">{posting.text.length > 200 ? posting.text.substring(0,100)+'...' : posting.text}</h4>
+                    <a className="content__text" href={`/postings/${posting._id}`}><h6 className="content__text grid__item__readmore">read more</h6></a>
+                    {userInfo && userInfo._id === blog.author._id
+                    ? 
+                    <div className="content__buttons row right">
+                        <Link to={`/postings/${posting._id}/edit`}><button className="grid__item__btn btn"><i className="fa fa-pencil" /></button></Link>
+                        <button className="grid__item__btn btn" onClick={() => deletePostingHandler(posting)}><i className="fa fa-trash-o" /></button>
+                    </div>
+                    : <></>}
+                    
                 </div>
             </Link>
         );
     };
 
-    const followHandler = () => {
-        dispatch(addFollow(blogId));
-    };
+
     
     useEffect(() => {
         dispatch(getBlogDetails(blogId));
         dispatch(postingGetList());
         dispatch(getFollows());
-    }, [dispatch, blogId, successFollowAdd])
+    }, [dispatch, blogId, successFollowAdd, postingDeleteSuccess]);
 
     return (
         <div className="container__long">
@@ -56,28 +81,46 @@ export default function Blog(props) {
             : !blog ? <h3>Blog not found. Please try again</h3>
             :
             <div className="container__long">
+
+                {/* BLOG HEADER */}
                 <div className="page__header">
                     <img src={blog.image} className="page__image" alt={`${blog.title}`} />
                     <h5 className="page__corner__left">CATEGORY / {blog.category.toUpperCase()}</h5>
                     <Link to={`/users/${blog.author._id}`}>
-                        <div className="row center page__thumbnail">
-                            <img src={blog.author.image} alt={`author ${blog.author.username}`} className="thumbnail__small" /> 
-                            <h2>{blog.author.username}</h2>
+                        <div className="page__author">
+                            <h4 className="content__text margin__vertical__small">created on {RenderDate(blog.createdAt)}</h4>
+                            <h4> by <span className="page__author__name margin__vertical__small content__text">{blog.author.username}</span></h4>
                         </div>
                     </Link>
                     <h1 className="page__title">{blog.title}</h1>
-                    <div className="row center">
-                        <h3 className="page__subtitle">followed by {blogFollows.length > 1 ? blogFollows.length+' readers' : blogFollows.length+' reader'}
-                        {blogFollows.filter(blog => blog.user === userInfo._id).length > 0
+                    <h6 className="content__text">{blog.description}</h6>
+                    <div className="row center margin__vertical__small">
+                        <h4 className="content__text">followed by {blogFollows.length > 1 ? blogFollows.length+' readers' : blogFollows.length+' reader'} 
+                        {blogFollows.filter(follow => follow.user === userInfo._id).length > 0
                             && <span className="italic"> - now following</span>}
-                        </h3>
-                        {userInfo 
-                        && (userInfo._d !== blog.author._id) 
+                        </h4>
+                        {userInfo  
+                        && (userInfo._id !== blog.author._id) 
                         && blogFollows.filter(blog => blog.user === userInfo._id).length === 0
-                        && <button className="btn__follow" onClick={followHandler}> + follow</button>}
-                        
+                        && <button className="btn__follow content__text" onClick={followHandler}> + follow</button>}
                     </div>
+
+                    {/* If user is the author, edit button shows */}
+                    {userInfo && userInfo._id === blog.author._id ?
+                    <div className="margin__vertical__small row center">
+                        <Link to={`/blogs/${blog._id}/edit`}>
+                            <button className="btn__follow content__text" onClick={editHandler}>edit blog</button>
+                        </Link>
+                        <Link to="/write">
+                            <button className="btn__follow content__text">write</button>
+                        </Link>
+                    </div>
+                    :<></>}
+                    
+                    <h5 className="page__corner__rightbottom page__category">{myPostings? myPostings.length : '0'} postings</h5>
                 </div>
+                
+                {/* BLOG'S POSTING LIST */}
                 <div className="page__content">
                     {loadingPostings && <Loading />}
                     {errorPostings && <Message message="error">{errorPostings}</Message>}
@@ -85,9 +128,9 @@ export default function Blog(props) {
                         {myPostings && myPostings.map(posting => renderPosting(posting))}
                     </div>
                 </div>
+
             </div>
             }
-            
             
         </div>
     )

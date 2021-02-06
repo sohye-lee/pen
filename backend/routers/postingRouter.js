@@ -26,6 +26,16 @@ postingRouter.route('/')
         res.json(posting);
     })
     .catch(err => next(err));
+})
+.delete((req,res,next) => {
+    Posting.deleteMany()
+    .then(response => {
+        console.log('All postings delete');
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
+    })
+   .catch(err => next(err));
 });
 
 postingRouter.route('/:postingId')

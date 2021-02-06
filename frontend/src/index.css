@@ -161,7 +161,6 @@ html {
     background-color: var(--Red) !important;
 }
 
-
 .alert-info {
     color: var(--Green);
     background-color: var(--LightGray);
@@ -270,13 +269,12 @@ html {
 .header__dropdown {
     position: absolute;
     top: 90px;
-    background-color: yellow;
     display: flex;
     flex-direction: column;
     padding: 10px;
     transform: translateX(-10px);
     background-color: rgba(0,0,0,.5);
-    z-index: 1;
+    z-index: 100;
 }
 
 .header__dropdown .header__item {
@@ -358,8 +356,7 @@ html {
     width: 100%;
     position: absolute;
     z-index: -100;
-    filter: grayscale(.5);
-    filter: brightness(.5);
+    filter: grayscale(.9) brightness(.5) contrast(1.1);
 }
 
 .page__corner__left {
@@ -372,6 +369,41 @@ html {
     position: absolute;
     top: 1rem;
     right: 1rem;
+}
+
+.page__corner__rightbottom {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.page__title {
+    font-size: 3rem;
+    margin: 4rem 0;
+}
+
+.page__subtitle {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+.page__author {
+    text-decoration: none;
+    color: var(--White);
+}
+
+.page__author__name {
+    font-weight: 700;
+    font-style: oblique;
+    font-size: 1.3rem !important;
+    border-bottom: 1px solid var(--White);
+    padding: .2rem;
+}
+
+.thumbnail__small {
+    width: 2.3rem;
+    height: 2.3rem;
+    margin: 1rem;
 }
 
 .btn__follow {
@@ -392,27 +424,6 @@ html {
     color: var(--DarkGray)
 }
 
-.page__title {
-    font-size: 3rem;
-    margin: 1rem 0 2rem 0;
-}
-
-.page__subtitle {
-    font-size: 1.2rem;
-    margin: 1rem 0;
-}
-
-.page__thumbnail {
-    text-decoration: none;
-    color: var(--White);
-}
-
-.thumbnail__small {
-    width: 2.3rem;
-    height: 2.3rem;
-    margin: 1rem;
-}
-
 .page__content {
     width: 100%;
 }
@@ -427,10 +438,10 @@ html {
 
 .grid__item {
     max-width: 30rem;
-    height: 30rem;
+    height: 32rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    margin: 0 auto;
 }
 
 .grid__item * {
@@ -440,6 +451,8 @@ html {
 
 .grid__item__img {
     max-width: 100%;
+    width: 100%;
+    margin: 0 0 1rem 0;
     filter: grayscale(1) brightness(.8) contrast(.7);
 }
 
@@ -454,6 +467,31 @@ html {
 
 .grid__item__subtitle {
     margin: 0 0 1.2rem 0;
+}
+
+.grid__item__readmore {
+    letter-spacing: -.02rem;
+    margin-top: .5rem;
+    /* font-family: 'Open Sans', serif !important; */
+    font-weight: 600;
+
+}
+
+.grid__item__btn {
+    outline: none;
+    border: none;
+    width: 3.5rem;
+    margin-left: 1rem;
+    background-color: var(--DarkGray);
+    color: var(--White);
+}
+
+.grid__item__btn * {
+    color: var(--White);
+}
+
+.grid__item__btn:hover {
+    background-color: var(--Blue);
 }
 
 
