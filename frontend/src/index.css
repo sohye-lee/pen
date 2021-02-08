@@ -102,9 +102,20 @@ html {
     margin-right: 1rem !important;
 }
 
+.margin__left__small {
+    margin-left: 3rem;
+    padding-left: 2rem;
+}
+
 .margin__vertical__small {
     margin: 1rem 0;
 }
+
+.margin__vertical__big {
+    margin: 2.5rem 0;
+}
+
+
 
 .btn {
     width: 100%;
@@ -352,11 +363,27 @@ html {
     color: var(--White);
 }
 
+.page__header.black {
+    height: auto;
+}
+
+.page__header.black * {
+    color: var(--Black);
+}
+
 .page__image {
     width: 100%;
     position: absolute;
     z-index: -100;
     filter: grayscale(.9) brightness(.5) contrast(1.1);
+}
+
+.page__image.separate {
+    width: 100%;
+    object-fit: cover;
+    position: relative !important;
+    filter:grayscale(.2) brightness(.9) contrast(1.1);
+    height: 40rem;
 }
 
 .page__corner__left {
@@ -380,6 +407,7 @@ html {
 .page__title {
     font-size: 3rem;
     margin: 4rem 0;
+    color: var(--White);
 }
 
 .page__subtitle {
@@ -494,6 +522,76 @@ html {
     background-color: var(--Blue);
 }
 
+/* ================== POSTING PAGE ================== */
+
+.posting__category {
+    /* width: 11rem; */
+    padding: 1rem;
+    font-size: .8rem;
+    border: 2px solid var(--Black);
+}
+
+.posting__category:hover {
+    background-color: var(--Black);
+    color: var(--White);
+}
+
+.posting__header {
+    width: 95%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.posting__header__content {
+    width: 85%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.thumbnail__xsmall {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
+    filter: grayscale(1);
+    border-radius: 50%;
+}
+.posting__author {
+    /* text-transform: uppercase; */
+    font-size: 1.6rem;
+    /* padding-bottom: .1rem;
+    border-bottom: 3px solid var(--Black); */
+    cursor: pointer;
+}
+.posting__title {
+    font-size: 3rem;
+}
+
+.posting__subtitle {
+
+}
+
+.posting__content {
+    width: 85%;
+    margin: 3rem auto;
+}
+
+.btn__posting {
+    background-color: transparent;
+    border: dashed 1px var(--Black);
+    outline: none;
+    color: var(--Black);
+    opacity: .8;
+    height: 1.8rem;
+    width: 8rem;
+    font-size: 1.1rem;
+    margin: 0 1rem;
+    transition: var(--Transition);
+}
+
+.btn__posting:hover {
+    background-color: var(--Black);
+    color: var(--White)
+}
 
 /* ================== SECTION : VERTICAL SCROLL ================== */
 

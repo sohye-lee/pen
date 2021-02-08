@@ -6,6 +6,7 @@ import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { blogGetList } from '../actions/blogActions';
+import { RenderHashtags } from '../components/RenderHashtags';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,6 +14,11 @@ dotenv.config();
 export default function EditPosting(props) {
     const dispatch = useDispatch();
     const postingId = props.match.params.postingId;
+    const redirectPath = props.location.search 
+        ? props.location.search.split('=')[1]
+        : '/';
+    // const redirectPath = props.location.search.split('=')[1];
+
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const postingDetails = useSelector(state => state.postingDetails);
@@ -21,20 +27,12 @@ export default function EditPosting(props) {
     const { blogs } = blogList;
     const myblogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
 
-
-
     const [title, setTitle] = useState(posting ? posting.title : '');
     const [blog, setBlog] = useState(posting ? posting.blog._id : '');
     const [category, setCategory] = useState(posting ? posting.category : '');
     const [text, setText] = useState(posting ? posting.text : '');
     const [image, setImage] = useState(posting ? posting.image : '');
     const [hashtags, setHashtags] = useState(posting ? posting.hashtags.join(',').toString()  : '');
-    const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
-
-    const redirectPath = props.location.search 
-        ? props.location.search.split('=')[1]
-        : '/';
-
 
     const categories = CATEGORIES.map(category => (
         <option value={category} key={category}>{category}</option>
@@ -52,19 +50,29 @@ export default function EditPosting(props) {
         setCategory(posting ? posting.category : '');
         setText(posting ? posting.text : '');
         setImage(posting ? posting.image : '');
-        setHashtags(posting ? posting.hashtags.join(',').toString() : '');
+        setHashtags(posting ? posting.hashtags.join(',') : '');
     };
 
     const submitHandler = () => {
-        const hashList = makeHashList(hashtags);
+        const hashList = RenderHashtags(hashtags);
         dispatch(updatePosting({_id: postingId, title, blog, category, text, image, hashtags: hashList}));
         if (success) {
             alert('Your story has been successfully updated!');
         }
     };
+
+    let isValid = false;
+    if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {
+        isValid = true;
+    }
+
+    const cancelHandler = () => {
+        console.log(window.location.search ? window.location.search : 'no location');
+        props.history.push(redirectPath);
+    }
+
     
     useEffect(() => {
-
         if (!userInfo) {
             alert('You need to login!');
             props.history.push('/login');
@@ -74,17 +82,8 @@ export default function EditPosting(props) {
         resetHandler();
         
         if (success) {
-   
-            props.history.push(`/postings/${posting._id}`);
+            props.history.push(`/postings/${postingId}`);
         }
-
-        // if (myblogs)  {
-        //     if (myblogs.length === 0) {
-        //         alert('You need to create a blog before writing!');
-        //         props.history.push('/createblog');
-        //     }
-        // }
-        
     },[dispatch, success, props.history, userInfo]);
 
     return (
@@ -130,22 +129,21 @@ export default function EditPosting(props) {
                 <div className="row">
                     <Editor
                         apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-                        initialValue="<p>write your story here.</p>"
+                        initialValue={`<p>${posting ? posting.text : 'Write your story here'}</p>`}
                         init={{
-                        height: 400,
-                        width: 800,
-                        menubar: false,
-                        content_style: 'body { font-family:Courier New, Courier, monospace; font-size:1.1rem }',
-                        plugins: [
-                            'advlist autolink lists link image charmap print preview anchor',
-                            'searchreplace visualblocks code fullscreen',
-                            'insertdatetime media table paste code help wordcount'
-                        ],
-                        toolbar:
-                            'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+                            height: 400,
+                            width: 800,
+                            menubar: false,
+                            content_style: 'body { font-family:Courier New, Courier, monospace; font-size:1.1rem }',
+                            plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar:
+                                'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
                         }}
                         onEditorChange={setText}
-                        // outputFormat="text"
                     />
                 </div>
                 <div className="row">
@@ -164,24 +162,23 @@ export default function EditPosting(props) {
                         type="text"
                         id="hashtags"
                         placeholder="enter hashtags separated by commas"
-                        value={hashtags}
+                        value={hashtags.toLowerCase().replace(/[^\w\s]/gi, ' ').replace(/ +/g, ',').replace(/,+/g,',')}
                         onChange={e => setHashtags(e.target.value)}
                     />
                 </div>
                 <div className="row">
                     <button 
                         className="form__btn btn" 
-                        type="submit" disabled={
-                            blog === '' ? true : false
-                        }
-                        style={{backgroundColor: blog === '' ? 'var(--Gray)' : 'var(--Blue)'}}
+                        type='submit'
+                        disabled={isValid ? false : true}
+                        style={{backgroundColor: isValid ? 'var(--Blue)' : 'var(--Gray)', boxShadow: !isValid && 'none'}}
                     >
                         update this story
                     </button>
                 </div>
                 <div className="row between">
                     <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
-                    <button className="btn btn__cancel" onClick={e => props.history.push(redirectPath)}>cancel</button>
+                    <button className="btn btn__cancel" onClick={cancelHandler}>cancel</button>
                 </div>
                 
             </form>

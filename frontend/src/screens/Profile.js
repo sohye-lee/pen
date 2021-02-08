@@ -12,6 +12,8 @@ export default function Profile(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [image, setImage] = useState('/user.png');
+    const [introduction, setIntroduction] = useState('');
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -29,8 +31,8 @@ export default function Profile(props) {
         if (password !== confirmPassword) {
             alert('Password not matched. Please confirm your password.');
         } else {
-            if (window.confirm(`Do you want to update your profile?\nusername: ${username}\nemail: ${email}\npassword: ${password}`)) {
-                dispatch(profileUpdate({ userId: user._id, username, email, password }));
+            if (window.confirm(`Do you want to update your profile?\nusername: ${username}\nemail: ${email}\nintroduction: ${introduction}`)) {
+                dispatch(profileUpdate({ userId: user._id, username, email, password, image, introduction }));
             }
         }
     };
@@ -45,6 +47,8 @@ export default function Profile(props) {
             } else {
                 setUsername(user.username);
                 setEmail(user.email);
+                setImage(user.image);
+                setIntroduction(user.introduction);
             }
         }
     }, [dispatch, props.history, user, userInfo]);
@@ -102,6 +106,28 @@ export default function Profile(props) {
                             onChange={e => setConfirmPassword(e.target.value)}
                         />
                     </div>
+                    <div className="row">
+                        <textarea 
+                            className="form__input"
+                            type="text"
+                            id="introduction"
+                            rows={3}
+                            placeholder="tell us about you"
+                            value={introduction}
+                            onChange={e => setIntroduction(e.target.value)}
+                        />
+                    </div>
+                    <div className="row">
+                        <input 
+                            className="form__input"
+                            type="text"
+                            id="image"
+                            placeholder="image"
+                            value={image}
+                            onChange={e => setImage(e.target.value)}
+                        />
+                    </div>
+                    
                     <div className="row">
                         <button className="form__btn btn" type="submit">update</button>
                     </div>

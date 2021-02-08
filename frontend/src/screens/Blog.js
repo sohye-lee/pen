@@ -37,21 +37,29 @@ export default function Blog(props) {
     const deletePostingHandler = (posting) => {
         if (window.confirm(`Are you sure you wish to delete "${posting.title}"?`)) {
             dispatch(deletePosting(posting._id))
+            props.history.push(`/blogs/${blogId}`);
         } 
-        props.history.push(`/blogs`)
+        props.history.push(`/blogs/${blogId}`)
     };
 
     const renderPosting = (posting) => {
         const date = new Date(posting.updatedAt !== posting.createdAt ? posting.updatedAt : posting.createdAt);
         const dateInText = RenderDate(date);
+        const postingText = posting.text.length > 200 ? posting.text.substring(0,100)+'...' : posting.text;
 
         return (
-            <Link to={`/postings/${posting._id}`}>
+            <Link to={`/postings/${posting._id}`} key={posting._id}>
                 <div className="grid__item">
                     <h2 className="grid__item__title content__title">{posting.title}</h2>
                     <h4 className="grid__item__subtitle content__text">{posting.updatedAt !== posting.createdAt ? 'updated on '+dateInText : 'written on '+dateInText}</h4>
                     <img src={posting.image} alt={posting.title} className="grid__item__img"/>
-                    <h4 className="content__text">{posting.text.length > 200 ? posting.text.substring(0,100)+'...' : posting.text}</h4>
+                    <h4 className="content__text">
+                        <span 
+                            dangerouslySetInnerHTML={{
+                                __html: postingText
+                            }}
+                        />
+                    </h4>
                     <a className="content__text" href={`/postings/${posting._id}`}><h6 className="content__text grid__item__readmore">read more</h6></a>
                     {userInfo && userInfo._id === blog.author._id
                     ? 

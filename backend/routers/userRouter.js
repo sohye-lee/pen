@@ -88,6 +88,8 @@ userRouter.route('/:userId')
             if (req.body.password) {
                 user.password = bcrypt.hashSync(req.body.password, 8);
             }
+            user.image = req.body.image || user.image;
+            user.introduction = req.body.introduction || user.introduction;
         };
         user.save()
         .then(user => {
@@ -97,6 +99,8 @@ userRouter.route('/:userId')
                 _id: user._id,
                 username: user.username,
                 email: user.email,
+                image: user.image,
+                introduction: user.introduction,
                 isAdmin: user.isAdmin,
                 token: generateToken(user)
             })

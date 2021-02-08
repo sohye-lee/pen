@@ -56,9 +56,6 @@ export default function MyBlogs(props) {
         dispatch(getFollows());
         
     }, [userInfo, dispatch, successBlogDelete, successPostingDelete, props.history])
-    
-
-   
      
     const renderBlog = (blog) => {
         const myFollows = follows ? follows.filter(follow => follow.blogs.includes(blog._id)) : [];
@@ -113,11 +110,11 @@ export default function MyBlogs(props) {
                 </div>
                 <div className="content__subitle">
                     <p>{posting.hashtags && posting.hashtags.map(hashtag => (
-                        <span key={hashtag}>#{hashtag} </span>
+                        hashtag !== '' && <span key={hashtag}>#{hashtag} </span>
                     ))}</p>
                 </div>
                 <div className="content__buttons">
-                    <Link to={`/blogs/${posting._id}`}>
+                    <Link to={`/postings/${posting._id}`}>
                         <button className="btn small margin__right__small">see more</button>
                     </Link>
                     <button className="btn small delete" onClick={() => deletePostingHandler(posting)}>

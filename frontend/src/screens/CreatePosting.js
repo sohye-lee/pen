@@ -7,19 +7,24 @@ import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { POSTING_CREATE_RESET } from '../constants/postingConstants';
 import { blogGetList } from '../actions/blogActions';
+import { RenderHashtags } from '../components/RenderHashtags';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 export default function CreatePosting(props) {
     const dispatch = useDispatch();
+    const redirectPath = props.location.search 
+        ? props.location.search.split('=')[1]
+        : '/';
+
     const [title, setTitle] = useState('');
     const [blog, setBlog] = useState('');
     const [category, setCategory] = useState('');
     const [text, setText] = useState('');
     const [image, setImage] = useState(['']);
-    const [hashtags, setHashtags] = useState(['']);
-    const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
+    const [hashtags, setHashtags] = useState('');
+    // const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
 
     const blogList = useSelector(state => state.blogList);
     const { blogs } = blogList;
@@ -44,15 +49,21 @@ export default function CreatePosting(props) {
         setCategory('');
         setText('');
         setImage('');
-        setHashtags(['']);
+        setHashtags('');
     };
 
     const submitHandler = () => {
-        const hashList = makeHashList(hashtags);
+        const hashList = RenderHashtags(hashtags);
         dispatch(createPosting(title, blog, category, text, image, hashList));
         alert('Your new story has been successfully created!');
     };
     
+
+    let isValid = false;
+    if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {
+        isValid = true;
+    };
+ 
     useEffect(() => {
         if (!userInfo) {
             alert('You need to login!');
@@ -154,22 +165,21 @@ export default function CreatePosting(props) {
                         type="text"
                         id="hashtags"
                         placeholder="enter hashtags separated by commas"
-                        value={hashtags}
+                        value={hashtags.toLowerCase().replace(/[^\w\s]/gi, ',').replace(/ +/g, ',').replace(/,+/g,',')}
                         onChange={e => setHashtags(e.target.value)}
                     />
                 </div>
                 <button 
                         className="form__btn btn" 
-                        type="submit" disabled={
-                            blog === '' ? true : false
-                        }
-                        style={{backgroundColor: blog === '' ? 'var(--Gray)' : 'var(--Blue)'}}
+                        type='submit' 
+                        disabled={isValid ? false : true}
+                        style={{backgroundColor: isValid ? 'var(--Blue)' : 'var(--Gray)', boxShadow: !isValid && 'none'}}
                     >
                         post this story
                     </button>
                 <div className="row between">
                     <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
-                    <button className="btn btn__cancel" onClick={e => props.history.push('/')}>cancel</button>
+                    <button className="btn btn__cancel" onClick={e => props.history.push(redirectPath)}>cancel</button>
                 </div>
                 
             </form>
