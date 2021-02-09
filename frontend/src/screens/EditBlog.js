@@ -4,8 +4,7 @@ import { getBlogDetails, updateBlog } from '../actions/blogActions';
 import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-import {  BLOG_UPDATE_RESET } from '../constants/blogConstants';
-
+import { BLOG_UPDATE_RESET } from '../constants/blogConstants';
 
 export default function EditBlog(props) {
     const dispatch = useDispatch();
@@ -23,12 +22,8 @@ export default function EditBlog(props) {
     const { userInfo } = userLogin;
     const blogUpdate = useSelector(state => state.blogUpdate);
     const { loading: loadingUpdate, blog: blogUpdated, success: successUpdate, error: errorUpdate } = blogUpdate;
-    
-    const redirect = props.location.search
-        ? props.location.search.split('=')[1]
-        : '/';
 
-    const categories = CATEGORIES.map(category => (
+    const categories = CATEGORIES.map(category => ( 
         <option value={category} key={category}>{category}</option>
     ))
 
@@ -58,9 +53,15 @@ export default function EditBlog(props) {
             setDescription(blogUpdated ? blogUpdated.description : '');
             setImage(blogUpdated ? blogUpdated.image : '/noimage.jpg');
             props.history.push(`/blogs/${blogId}`);
+            dispatch({ type: BLOG_UPDATE_RESET });
         }
-    }, [dispatch, blogId, props.history, successUpdate]);
+    }, [dispatch, blogId, props.history, successUpdate, blogUpdated]);
 
+    let isValid = false;
+    if (title !== '' && category !== '' && description !== '' && image !== '') {
+        isValid = true;
+    }
+    
     return (
         <div className="container__center">
             <form className="form__content" onSubmit={submitHandler}>
@@ -116,11 +117,18 @@ export default function EditBlog(props) {
                         />
                     </div>
                     <div className="row">
-                        <button className="form__btn btn" type="submit">update</button>
+                        <button 
+                            className="form__btn btn" 
+                            type='submit'
+                            disabled={isValid ? false : true}
+                            style={{backgroundColor: isValid ? 'var(--Blue)' : 'var(--Gray)', boxShadow: !isValid && 'none'}}
+                        >
+                            update
+                        </button>
                     </div>
                     <div className="row between">
                         <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
-                        <button className="btn btn__cancel" onClick={e => props.history.push(redirect)}>cancel</button>
+                        <button className="btn btn__cancel" onClick={e => props.history.push(`/blogs/${blogId}`)}>cancel</button>
                     </div>
                 </>}
             </form>

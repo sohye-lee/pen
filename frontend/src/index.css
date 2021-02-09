@@ -103,8 +103,7 @@ html {
 }
 
 .margin__left__small {
-    margin-left: 3rem;
-    padding-left: 2rem;
+    margin-left: 1rem;
 }
 
 .margin__vertical__small {
@@ -112,7 +111,7 @@ html {
 }
 
 .margin__vertical__big {
-    margin: 2.5rem 0;
+    margin: 2.5rem 0 !important;
 }
 
 
@@ -432,6 +431,7 @@ html {
     width: 2.3rem;
     height: 2.3rem;
     margin: 1rem;
+    border-radius: 50%;
 }
 
 .btn__follow {
@@ -525,10 +525,11 @@ html {
 /* ================== POSTING PAGE ================== */
 
 .posting__category {
-    /* width: 11rem; */
     padding: 1rem;
     font-size: .8rem;
     border: 2px solid var(--Black);
+    transition: var(--Transition);
+    z-index: 90;
 }
 
 .posting__category:hover {
@@ -556,10 +557,7 @@ html {
     border-radius: 50%;
 }
 .posting__author {
-    /* text-transform: uppercase; */
     font-size: 1.6rem;
-    /* padding-bottom: .1rem;
-    border-bottom: 3px solid var(--Black); */
     cursor: pointer;
 }
 .posting__title {
@@ -567,12 +565,23 @@ html {
 }
 
 .posting__subtitle {
+    display: flex;
+    align-items: center;
+    margin: 1.3rem 0; 
+}
 
+.posting__blog {
+    border-bottom: 2px solid var(--Black);
+    padding-bottom: .3rem;
 }
 
 .posting__content {
-    width: 85%;
+    width: 75%;
     margin: 3rem auto;
+}
+
+.posting__text * {
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .btn__posting {
@@ -582,9 +591,10 @@ html {
     color: var(--Black);
     opacity: .8;
     height: 1.8rem;
-    width: 8rem;
+    min-width: 8rem;
     font-size: 1.1rem;
     margin: 0 1rem;
+    padding: 0 1rem;
     transition: var(--Transition);
 }
 
@@ -592,6 +602,68 @@ html {
     background-color: var(--Black);
     color: var(--White)
 }
+
+.posting__bar {
+    width: 100%;
+    border-bottom: 1px dashed var(--Black);
+}
+
+.posting__comment__content {
+    
+}
+
+.posting__comment {
+    border-bottom: 1px solid rgba(0,0,0,.3);
+    width: 100%;
+    padding: 1.5rem 0;
+}
+
+.posting__comment__author {
+    display: flex;
+    align-items: center;
+}
+
+.posting__comment__username {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.posting__comment__content {
+    width: 92%;
+    margin: 0 auto;
+    font-weight: 100;
+}
+
+.posting__comment__text {
+    font-family: 'Courier New', Courier, monospace;
+    margin: .9rem 0;
+}
+
+.posting__comment__date {
+    font-size: .8rem;
+    color: var(--Gray);
+}
+
+.posting__comment__form {
+    padding: 2rem 0;
+}
+/* .posting__comment__author {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    max-width: 15rem;
+}
+
+.posting__comment__title {
+    font-weight: 600;
+}
+
+.comment__form__username {
+    margin-top: 3rem;
+    font-size: 1.5rem !important;
+    font-weight: 600;
+} */
+
 
 /* ================== SECTION : VERTICAL SCROLL ================== */
 

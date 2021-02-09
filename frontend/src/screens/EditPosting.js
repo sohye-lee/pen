@@ -14,10 +14,9 @@ dotenv.config();
 export default function EditPosting(props) {
     const dispatch = useDispatch();
     const postingId = props.match.params.postingId;
-    const redirectPath = props.location.search 
+    const redirectPath = props.location
         ? props.location.search.split('=')[1]
         : '/';
-    // const redirectPath = props.location.search.split('=')[1];
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -64,11 +63,6 @@ export default function EditPosting(props) {
     let isValid = false;
     if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {
         isValid = true;
-    }
-
-    const cancelHandler = () => {
-        console.log(window.location.search ? window.location.search : 'no location');
-        props.history.push(redirectPath);
     }
 
     
@@ -178,7 +172,7 @@ export default function EditPosting(props) {
                 </div>
                 <div className="row between">
                     <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
-                    <button className="btn btn__cancel" onClick={cancelHandler}>cancel</button>
+                    <button className="btn btn__cancel" onClick={() => props.history.push('/blogs')}>cancel</button>
                 </div>
                 
             </form>

@@ -48,8 +48,8 @@ export default function Blog(props) {
         const postingText = posting.text.length > 200 ? posting.text.substring(0,100)+'...' : posting.text;
 
         return (
-            <Link to={`/postings/${posting._id}`} key={posting._id}>
-                <div className="grid__item">
+            <div className="grid__item"  key={posting._id}>
+                <Link to={`/postings/${posting._id}`}>
                     <h2 className="grid__item__title content__title">{posting.title}</h2>
                     <h4 className="grid__item__subtitle content__text">{posting.updatedAt !== posting.createdAt ? 'updated on '+dateInText : 'written on '+dateInText}</h4>
                     <img src={posting.image} alt={posting.title} className="grid__item__img"/>
@@ -60,17 +60,19 @@ export default function Blog(props) {
                             }}
                         />
                     </h4>
+                </Link>
                     <a className="content__text" href={`/postings/${posting._id}`}><h6 className="content__text grid__item__readmore">read more</h6></a>
-                    {userInfo && userInfo._id === blog.author._id
-                    ? 
-                    <div className="content__buttons row right">
-                        <Link to={`/postings/${posting._id}/edit`}><button className="grid__item__btn btn"><i className="fa fa-pencil" /></button></Link>
-                        <button className="grid__item__btn btn" onClick={() => deletePostingHandler(posting)}><i className="fa fa-trash-o" /></button>
-                    </div>
-                    : <></>}
-                    
+
+                {/* If user is author, buttons appear */}
+                {userInfo && userInfo._id === blog.author._id
+                ? 
+                <div className="content__buttons row right">
+                    <Link to={`/postings/${posting._id}/edit`}><button className="grid__item__btn btn"><i className="fa fa-pencil" /></button></Link>
+                    <button className="grid__item__btn btn" onClick={() => deletePostingHandler(posting)}><i className="fa fa-trash-o" /></button>
                 </div>
-            </Link>
+                : <></>}
+                    
+            </div>
         );
     };
 

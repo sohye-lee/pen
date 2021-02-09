@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, useHistory } from 'react-router-dom';
 import Footer from './components/Footer'
 import Header from './components/Header'
 import CreateBlog from './screens/CreateBlog';
@@ -12,9 +12,11 @@ import Blog from './screens/Blog';
 import EditBlog from './screens/EditBlog';
 import EditPosting from './screens/EditPosting';
 import Posting from './screens/Posting';
+// import { Router } from 'react-router';
+// import { createBrowserHistory } from 'history';
 
 export default function App() {
-    
+    // const history = useHistory();
     return (
         <BrowserRouter>
             <div className="app__container">

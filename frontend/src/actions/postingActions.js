@@ -57,7 +57,7 @@ export const updatePosting = (posting) => async(dispatch, getState) => {
 
 export const deletePosting = (postingId) => async(dispatch, getState)=> {
     const { userLogin: { userInfo } } = getState();
-    dispatch({ type: POSTING_DELETE_REQUEST, payload: postingId });
+    dispatch({ type: POSTING_DELETE_REQUEST });
     try {
         const { data } = await Axios.delete(`/postings/${postingId}`, {
             headers: {
