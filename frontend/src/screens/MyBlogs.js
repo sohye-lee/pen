@@ -27,16 +27,16 @@ export default function MyBlogs(props) {
   
     const deleteBlogHandler = (blog) => {
         if (window.confirm(`Are you sure you wish to delete "${blog.title.toUpperCase()}"?`)) {
-            dispatch(deleteBlog(blog._id));
             if (postings) {
                 const blogPostings = postings.filter(posting => posting.blog._id === blog._id);
                 if (blogPostings) {
                     blogPostings.forEach(posting => {
-                    dispatch(deletePosting(posting._id))
+                        dispatch(deletePosting(posting._id))
                     }
-                )}
-            } 
-        }
+                    )}
+                } 
+            }
+            dispatch(deleteBlog(blog._id));
     };
 
     const deletePostingHandler = (posting) => {
@@ -62,9 +62,9 @@ export default function MyBlogs(props) {
         const myFollowNum = myFollows.length;
         return (
             <div className="content__container" key={blog._id}>
-                <img className="content__img" src="/noimage.jpg" alt="sectionimage"/> 
+                <img className="content__img" src={blog.image} alt="sectionimage"/> 
                 <div className="content__subtitle">
-                    <p className="content__category">TOPIC/ {blog.category}</p>
+                    <p className="content__category">{blog.category}</p>
                 </div>
                 <h3 className="content__title">{blog.title}</h3>
                 <div className="row right content__subtitle">
@@ -89,7 +89,7 @@ export default function MyBlogs(props) {
         const postingTextShort = posting.text.length > 200 ? posting.text.substring(0,200)+'...' : posting.text;
         return (
             <div className="content__container" key={posting._id}>
-                <img className="content__img" src="/noimage.jpg" alt="sectionimage"/> 
+                <img className="content__img" src={posting.image} alt="sectionimage"/> 
                 <div className="content__subtitle">
                     <h4 className="content__category">{posting.category}</h4>
                 </div>   

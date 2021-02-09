@@ -37,7 +37,7 @@ const postingSchema = mongoose.Schema({
     },
     text: {
         type: String,
-        default: ''
+        required: true
     },
     hashtags: {
         type: [String],

@@ -196,7 +196,7 @@ export default function Posting(props) {
                             onChange={(e) => setTextToEdit(e.target.value)}
                         />
                         <div className="row left">
-                            <button className="margin__right__small btn small" type="submit">submit</button>
+                            <button className="margin__right__small btn small" type="submit">update</button>
                             <button className="btn small btn__red" onClick={() => setEditFormOpen(false)}>cancel</button>
                         </div>
                     </form>)}

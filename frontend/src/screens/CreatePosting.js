@@ -56,6 +56,7 @@ export default function CreatePosting(props) {
         const hashList = RenderHashtags(hashtags);
         dispatch(createPosting(title, blog, category, text, image, hashList));
         alert('Your new story has been successfully created!');
+        props.history.push(`/postings/${postingCreated._id}`);
     };
     
 
@@ -90,7 +91,7 @@ export default function CreatePosting(props) {
 
     return (
         <div className="container__long">
-            <form className="form__content" onSubmit={submitHandler}>
+            <form className="form__content" onSubmit={() => {submitHandler(); props.history.push(`/postings/${postingCreated._id}`)}}>
                 <h1 className="form__title">
                     share a new story!
                 </h1>

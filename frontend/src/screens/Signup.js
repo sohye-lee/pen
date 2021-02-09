@@ -11,6 +11,8 @@ export default function Signup(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [image, setImage] = useState('/user.png');
+    const [introduction, setIntroduction] = useState('');
 
     const userSignup = useSelector(state => state.userSignup);
     const { userInfo, loading, error } = userSignup;
@@ -24,7 +26,7 @@ export default function Signup(props) {
         if (password !== confirmPassword) {
             alert('Password not matched. Please confirm your password.');
         } else {
-            dispatch(signup(username, email, password));
+            dispatch(signup(username, email, password, image, introduction));
             alert(`Welcome, you are now our new writer! \nusername: ${username} \nemail: ${email}`);
         }
     }
@@ -83,6 +85,27 @@ export default function Signup(props) {
                         onChange={e => setConfirmPassword(e.target.value)}
                     />
                 </div>
+                <div className="row">
+                        <textarea 
+                            className="form__input"
+                            type="text"
+                            id="introduction"
+                            rows={3}
+                            placeholder="tell us about you"
+                            value={introduction}
+                            onChange={e => setIntroduction(e.target.value)}
+                        />
+                    </div>
+                    <div className="row">
+                        <input 
+                            className="form__input"
+                            type="text"
+                            id="image"
+                            placeholder="image"
+                            value={image}
+                            onChange={e => setImage(e.target.value)}
+                        />
+                    </div>
                 <div className="row">
                     <button className="form__btn btn" type="submit">Create</button>
                 </div>

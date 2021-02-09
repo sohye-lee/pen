@@ -16,7 +16,7 @@ const blogSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        default: '/noimage.jpg'
+        required: true
     },
     description: {
         type: String,

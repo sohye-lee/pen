@@ -18,11 +18,11 @@ const userSchema = new Schema({
     },
     introduction: {
         type: String,
-        default: ''
+        required: true
     },
     image: {
         type: String,
-        default: '/user.png'
+        required: true
     },
     isAdmin: {
         type: Boolean,

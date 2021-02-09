@@ -57,7 +57,6 @@ input, textarea, select {
     letter-spacing: 0;
 }
 
-
 html {
     overflow:   scroll;
   }
@@ -340,11 +339,17 @@ html {
 
 .container__long {
     width: 100%;
-    /* height: 100%; */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+}
+
+.container__horizontal {
+    height: 100%;
+    padding: 2rem;
+    overflow-x: scroll;
+    display: flex;
 }
 
 /* ================== BLOG PAGE ================== */
@@ -647,22 +652,6 @@ html {
 .posting__comment__form {
     padding: 2rem 0;
 }
-/* .posting__comment__author {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    max-width: 15rem;
-}
-
-.posting__comment__title {
-    font-weight: 600;
-}
-
-.comment__form__username {
-    margin-top: 3rem;
-    font-size: 1.5rem !important;
-    font-weight: 600;
-} */
 
 
 /* ================== SECTION : VERTICAL SCROLL ================== */
@@ -682,6 +671,10 @@ html {
 .section__small {
     width: 30%;
     min-width: 28rem;
+}
+
+.section__small * {
+    color: var(--Black);
 }
 
 .section__title {

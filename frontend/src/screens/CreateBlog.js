@@ -27,6 +27,7 @@ export default function CreateBlog(props) {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(createBlog(title, category, description, image));
+        // props.history.push(`/blogs/${blogCreated._id}`);
     };
  
     const resetHandler = () => {
@@ -47,7 +48,7 @@ export default function CreateBlog(props) {
             setCategory('');
             setDescription('');
             setImage('');
-            props.history.push(`/blogs`);
+            props.history.push(`/blogs/${blogCreated._id}`);
         }
     }, [dispatch, success, props.history, userInfo, blogCreated])
 

@@ -20,6 +20,7 @@ blogRouter.route('/')
         title: req.body.title,
         category: req.body.category,
         description: req.body.description,
+        image: req.body.image,
         featured: req.body.featured || false
     })
     .then(blog => {

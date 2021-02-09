@@ -58,6 +58,7 @@ export default function EditPosting(props) {
         if (success) {
             alert('Your story has been successfully updated!');
         }
+        props.history.push(`/postings/${postingId}`);
     };
 
     let isValid = false;
