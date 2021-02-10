@@ -6,7 +6,6 @@ import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { BLOG_CREATE_RESET } from '../constants/blogConstants';
 
-
 export default function CreateBlog(props) {
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
@@ -27,7 +26,6 @@ export default function CreateBlog(props) {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(createBlog(title, category, description, image));
-        // props.history.push(`/blogs/${blogCreated._id}`);
     };
  
     const resetHandler = () => {

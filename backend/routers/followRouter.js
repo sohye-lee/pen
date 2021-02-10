@@ -1,5 +1,6 @@
 import express from 'express';
 import Follow from '../models/follow.js';
+import { isAuth } from '../utils.js';
 
 const followRouter = express.Router();
 
@@ -13,26 +14,18 @@ followRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post((req, res, next) => {
+.post(isAuth, (req, res, next) => {
     Follow.findOne({ user: req.body.user })
     .then(follow => {
         if (!follow) {
-            Follow.create({
-                user: req.body.user,
-                blogs: [req.body.blog]
-            })
+            Follow.create(req.body)
             .then(follow => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json(follow);
             })
             .catch(err => next(err));
-        } else {
-            // req.body.forEach(fol => {
-            //     if (!follow.blogs.includes(fol._id)) {
-            //         follow.blogs.push(fol._id);
-            //     }
-            // })
+        } else if (follow && !follow.blogs.includes(req.body.blog)) {
             follow.blogs.push(req.body.blog);
             follow.save()
             .then(follow => {
@@ -40,6 +33,9 @@ followRouter.route('/')
                 res.setHeader('Content-Type', 'application/json');
                 res.json(follow);
             })
+        } else if (follow && follow.blogs.includes(req.body.blog)) {
+            res.setStatusCode = 200;
+            res.end('You are already following!')
         }
     })
     .catch(err => next(err));
@@ -48,15 +44,25 @@ followRouter.route('/')
     res.statusCode = 403;
     res.end('PUT is not supported');
 })
-.delete((req, res, next) => {
-    Follow.findOneAndDelete({ user: req.user._id })
+.delete((req,res,next) => {
+    Follow.deleteMany()
     .then(response => {
-       res.statusCode = 200;
-       res.setHeader('Content-Type','application/json');
-       res.json(response);
-       console.log(`All follows of ${user.firstname} have been unfollowed.`)
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json')
+        res.json(response);
     })
-});
+    .catch(err => next(err));
+})
+
+// .delete((req, res, next) => {
+//     Follow.findOneAndDelete({ user: req.user._id })
+//     .then(response => {
+//        res.statusCode = 200;
+//        res.setHeader('Content-Type','application/json');
+//        res.json(response);
+//        console.log(`All follows of ${user.firstname} have been unfollowed.`)
+//     })
+// });
 
 followRouter.route('/:blogId')
 .get((req, res, next) => {
@@ -67,7 +73,7 @@ followRouter.route('/:blogId')
     Follow.findOne({ user: req.body.user })
     .then(follow => {
         if (follow) {
-            if (!follow.blogs.includes(req.params.blogId)) {
+            if (follow.blogs.filter(blog => blog._id.includes(req.params.blogId)) === []) {
                 follow.blogs.push(req.params.blogId);
                 follow.save()
                 .then(follow => {
@@ -94,16 +100,24 @@ followRouter.route('/:blogId')
     res.statusCode = 403;
     res.end(`PUT operation not supported on /follows/${req.params.blogId}`);
 })
+
+followRouter.route('/:userId/:blogId')
 .delete((req, res, next) => {
-    Follow.findOne({ user: req.user._id })
+    Follow.findOne({ user: req.params.userId })
     .then(follow => {
         if (follow) {
-            follow.blogs.filter(blog => blog.toString() !== req.params.blogId);
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json(follow);
+            const blogList = follow.blogs.filter(blog => blog.toString() !== req.params.blogId);
+            follow.blogs = blogList;
+            follow.save()
+            .then((follow) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(follow);
+            })
+            .catch(err => next(Err));
         } else {
-            res.end('You are not following this blog.');
+            res.statusCode = 403;
+            res.end('You are not following any blog.');
         }
     })
     .catch(err => next(err));

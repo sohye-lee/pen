@@ -31,6 +31,13 @@ export default function Header() {
         }
     };
 
+    // window.addEventListener('click', (e) => {
+    //     if (!document.getElementById('header').contains(e.target)) {
+    //         setDropdown("none");
+    //         setDisplay("none");
+    //     }
+    // });
+
     useEffect(() => {
         if (userInfo) {
             setDropdown("none");
@@ -38,7 +45,7 @@ export default function Header() {
     }, [userInfo]);
 
     return (
-        <div className="header__container row">
+        <div className="header__container row" id="header">
             <div className="header__content row between">
                 <div className="header__left">
                         <Link to="/" className="header__item logo">pen</Link>
@@ -72,7 +79,8 @@ export default function Header() {
                                 <div className="header__dropdown" style={{display: dropdown}} onClick={() => setDropdown("none")}>
                                     <Link className="header__item" to="/profile" onClick={() => setDropdown("none")}>profile</Link>
                                     <Link className="header__item" to="/write" onClick={() => setDropdown("none")}>write</Link>
-                                    <Link className="header__item" to="/blogs" onClick={() => setDropdown("none")}>blogs</Link>
+                                    <Link className="header__item" to="/blogs" onClick={() => setDropdown("none")}>my blogs</Link>
+                                    <Link className="header__item" to="/follows" onClick={() => setDropdown("none")}>follows</Link>
                                     <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
                                 </div>
                             </div>

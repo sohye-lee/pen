@@ -24,7 +24,6 @@ export default function CreatePosting(props) {
     const [text, setText] = useState('');
     const [image, setImage] = useState(['']);
     const [hashtags, setHashtags] = useState('');
-    // const makeHashList = (text) => text.toLowerCase().replace(/ +( \+\(\)\[\]\{\}\/\?@\$&*?!=-_.)/g, ",").split(",");
 
     const blogList = useSelector(state => state.blogList);
     const { blogs } = blogList;
@@ -55,30 +54,21 @@ export default function CreatePosting(props) {
     const submitHandler = () => {
         const hashList = RenderHashtags(hashtags);
         dispatch(createPosting(title, blog, category, text, image, hashList));
-        alert('Your new story has been successfully created!');
-        props.history.push(`/postings/${postingCreated._id}`);
     };
-    
 
+    
     let isValid = false;
     if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {
         isValid = true;
     };
- 
+    
     useEffect(() => {
         if (!userInfo) {
             alert('You need to login!');
             props.history.push('/login');
         }
-
-        dispatch(blogGetList());
-        resetHandler();
         
-        if (success) {
-            resetHandler();
-            dispatch({ type: POSTING_CREATE_RESET });
-            props.history.push(`/postings/${postingCreated._id}`);
-        }
+        dispatch(blogGetList());
 
         if (myblogs)  {
             if (myblogs.length === 0) {
@@ -87,11 +77,20 @@ export default function CreatePosting(props) {
             }
         }
         
+        if (success) {
+            alert('Your new story has been successfully created!');
+            dispatch({ type: POSTING_CREATE_RESET });
+            console.log(postingCreated._id)
+            resetHandler();
+            props.history.push(`/postings/${postingCreated._id}`);
+        }
+
+        
     },[dispatch, success, postingCreated, props.history, userInfo]);
 
     return (
         <div className="container__long">
-            <form className="form__content" onSubmit={() => {submitHandler(); props.history.push(`/postings/${postingCreated._id}`)}}>
+            <form className="form__content" onSubmit={submitHandler}>
                 <h1 className="form__title">
                     share a new story!
                 </h1>

@@ -22,9 +22,16 @@ export default function Blog(props) {
     const myPostings = postings && postings.filter(posting => posting.blog._id === blogId);
     const followList = useSelector(state => state.followList);
     const { follows } = followList;
-    const blogFollows = follows ? follows.filter(follow => follow.blogs.includes(blogId)) : [];
     const followAdd = useSelector(state => state.followAdd);
     const { success: successFollowAdd } = followAdd;
+    
+    // let followsForThisBlog = [];
+    // follows && follows.forEach((each) => {
+    //     if (each.blogs.filter(blog => blog === blogId).length > 0) {
+    //         followsForThisBlog.push(each);
+    //     }
+    // })
+    const followsForThisBlog = follows && follows.filter(follow => follow.blogs.includes(blogId));
 
     const followHandler = () => {
         dispatch(addFollow(blogId));
@@ -105,13 +112,13 @@ export default function Blog(props) {
                     <h1 className="page__title">{blog.title}</h1>
                     <h6 className="content__text">{blog.description}</h6>
                     <div className="row center margin__vertical__small">
-                        <h4 className="content__text">followed by {blogFollows.length > 1 ? blogFollows.length+' readers' : blogFollows.length+' reader'} 
-                        {blogFollows.filter(follow => follow.user === userInfo._id).length > 0
+                        <h4 className="content__text">followed by {followsForThisBlog.length > 1 ? followsForThisBlog.length+' readers' : followsForThisBlog.length+' reader'} 
+                        {followsForThisBlog && followsForThisBlog.filter(follow => follow.user === userInfo._id).length > 0
                             && <span className="italic"> - now following</span>}
                         </h4>
                         {userInfo  
                         && (userInfo._id !== blog.author._id) 
-                        && blogFollows.filter(blog => blog.user === userInfo._id).length === 0
+                        && followsForThisBlog.filter(blog => blog.user === userInfo._id).length === 0
                         && <button className="btn__follow content__text" onClick={followHandler}> + follow</button>}
                     </div>
 

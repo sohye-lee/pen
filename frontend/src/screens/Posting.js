@@ -71,7 +71,7 @@ export default function Posting(props) {
 
     const renderComment = (comment) => {        
         return (
-            <div className="posting__comment">
+            <div className="posting__comment" key={comment._id}>
                 <div className="posting__comment__author"> 
                     <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
                     <h3 className="posting__comment__username">{comment.author.username}</h3>
@@ -200,7 +200,8 @@ export default function Posting(props) {
                             <button className="btn small btn__red" onClick={() => setEditFormOpen(false)}>cancel</button>
                         </div>
                     </form>)}
-                    
+                    {loadingCommentEdit && <Loading />}
+                    {errorCommentEdit && <Message message="error">{errorCommentEdit}</Message>}
                 </div>
  
             </div>}

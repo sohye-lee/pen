@@ -13,6 +13,7 @@ import EditBlog from './screens/EditBlog';
 import EditPosting from './screens/EditPosting';
 import Posting from './screens/Posting';
 import Main from './screens/Main';
+import Follows from './screens/Follows';
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
                     <Route path="/blogs/:blogId/edit" component={EditBlog} exact />
                     <Route path="/postings/:postingId" component={Posting} exact />
                     <Route path="/postings/:postingId/edit" component={EditPosting} exact />
+                    <Route path="/follows" component={Follows} />
                 </div>
                 <Footer />
             </div>

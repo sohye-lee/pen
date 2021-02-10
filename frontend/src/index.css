@@ -653,7 +653,6 @@ html {
     padding: 2rem 0;
 }
 
-
 /* ================== SECTION : VERTICAL SCROLL ================== */
 
 .section {
@@ -781,9 +780,69 @@ html {
     margin-top: 1rem;
 }
 
-/* ================== MY BLOGS ================== */
+/* ================== FOLLOWS ================== */
+.follow__container {
+    margin-top: 3rem;
+    max-width: 35rem;
+    height: 100%;
+    overflow-y: scroll;
+}
 
+.follow__content {
+    width: 100%;
+}
+.follow__list * {
+    color: var(--Black);
+}
 
+.follow__title {
+    border-bottom: 1px solid var(--Gray);
+    padding: 2rem 0;
+}
+
+.follow__item {
+    border-bottom: 1px dashed var(--Gray) ;
+    padding: 1.2rem 0;
+}
+
+.follow__author {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 6rem;
+}
+
+.follow__item__title {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.follow__btn__delete {
+    padding: 1rem;
+    background-color: var(--White);
+    color: var(--Black);
+    outline: none;
+    border: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: var(--Transition);
+    text-align: center;
+}
+
+.follow__btn__delete:hover {
+    color: var(--White);
+    background-color: rgba(230, 10, 0, .8);
+    /* font-size: 1.5rem; */
+}
 
 /* ================== RESPONSIVE ================== */
 
