@@ -8,6 +8,7 @@ import Message from '../components/Message';
 import { blogGetList } from '../actions/blogActions';
 import { RenderHashtags } from '../components/RenderHashtags';
 import dotenv from 'dotenv';
+import { POSTING_UPDATE_RESET } from '../constants/postingConstants';
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ export default function EditPosting(props) {
     const { userInfo } = userLogin;
     const postingDetails = useSelector(state => state.postingDetails);
     const { loading, error, success, posting } = postingDetails;
+    const postingUpdate = useSelector(state => state.postingUpdate);
+    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = postingUpdate;
     const blogList = useSelector(state => state.blogList);
     const { blogs } = blogList;
     const myblogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
@@ -76,10 +79,12 @@ export default function EditPosting(props) {
         dispatch(blogGetList());
         resetHandler();
         
-        if (success) {
+        if (successUpdate) {
+            dispatch({ type: POSTING_UPDATE_RESET });
             props.history.push(`/postings/${postingId}`);
+            
         }
-    },[dispatch, success, props.history, userInfo]);
+    },[dispatch, successUpdate, props.history, userInfo]);
 
     return (
         <div className="container__long">

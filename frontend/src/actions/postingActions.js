@@ -1,5 +1,27 @@
 import Axios from 'axios';
-import { POSTING_CREATE_FAIL, POSTING_CREATE_REQUEST, POSTING_CREATE_SUCCESS, POSTING_DELETE_FAIL, POSTING_DELETE_REQUEST, POSTING_DELETE_SUCCESS, POSTING_DETAILS_FAIL, POSTING_DETAILS_REQUEST, POSTING_DETAILS_SUCCESS, POSTING_LIST_FAIL, POSTING_LIST_REQUEST, POSTING_LIST_SUCCESS, POSTING_UPDATE_FAIL, POSTING_UPDATE_REQUEST, POSTING_UPDATE_SUCCESS } from '../constants/postingConstants';
+import { 
+    POSTING_CREATE_FAIL, 
+    POSTING_CREATE_REQUEST, 
+    POSTING_CREATE_SUCCESS, 
+    POSTING_DELETE_FAIL, 
+    POSTING_DELETE_REQUEST, 
+    POSTING_DELETE_SUCCESS, 
+    POSTING_DETAILS_FAIL, 
+    POSTING_DETAILS_REQUEST, 
+    POSTING_DETAILS_SUCCESS, 
+    POSTING_LIKE_FAIL, 
+    POSTING_LIKE_REQUEST, 
+    POSTING_LIKE_SUCCESS, 
+    POSTING_LIST_FAIL, 
+    POSTING_LIST_REQUEST, 
+    POSTING_LIST_SUCCESS, 
+    POSTING_UNLIKE_REQUEST, 
+    POSTING_UNLIKE_SUCCESS,
+    POSTING_UNLIKE_FAIL,
+    POSTING_UPDATE_FAIL, 
+    POSTING_UPDATE_REQUEST, 
+    POSTING_UPDATE_SUCCESS 
+} from '../constants/postingConstants';
 
 export const postingGetList = () => async(dispatch) => {
     dispatch({ type: POSTING_LIST_REQUEST });
@@ -69,4 +91,18 @@ export const deletePosting = (postingId) => async(dispatch, getState)=> {
         dispatch({ type: POSTING_DELETE_FAIL, payload: error.message });
     }
 };
+
+export const likePosting = (postingId, userId) => async(dispatch, getState) => {
+    // const { userLogin: { userInfo } } = getState();
+    dispatch({ type: POSTING_LIKE_REQUEST, payload: { userId} });
+    try {
+        const { data } = await Axios.put(`/postings/${postingId}/liked`, {
+             userId
+        });
+        dispatch({ type: POSTING_LIKE_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: POSTING_LIKE_FAIL, payload: error.message });
+    }
+};
+
 

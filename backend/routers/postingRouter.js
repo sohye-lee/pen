@@ -53,7 +53,7 @@ postingRouter.route('/:postingId')
     })
     .catch(err => next(err));
 })
-.put(isAuth, (req,res,next) => {
+.put((req,res,next) => {
     Posting.findByIdAndUpdate(req.params.postingId, {
         $set: req.body
     }, { new: true })
@@ -153,5 +153,31 @@ postingRouter.route('/:postingId/comments/:commentId')
     .catch(err => next(err));
 });
 
+postingRouter.route('/:postingId/liked')
+.put((req, res, next) => {
+    Posting.findById(req.params.postingId)
+    .then(posting => {
+        if (!posting.liked.includes(req.body.userId)) {
+            posting.liked.push(req.body.userId);
+            posting.save()
+            .then(posting => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(posting);
+            })
+            .catch(err => next(err));
+        } else {
+            posting.liked = posting.liked.filter(like => like !== req.body.userId);
+            posting.save()
+            .then(posting => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(posting);
+            })
+            .catch(err => next(err));
+        }
+    })
+    .catch(err => next(err));
+})
 
 export default postingRouter;

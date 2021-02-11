@@ -11,8 +11,7 @@ const commentSchema = mongoose.Schema({
     }
 }, {
     timestamps: true
-})
-
+});
 
 const postingSchema = mongoose.Schema({
     author: {
@@ -48,9 +47,9 @@ const postingSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    like: {
-        type: Number,
-        default: 0
+    liked: {
+        type: [String],
+        default: []
     }
 },
 {

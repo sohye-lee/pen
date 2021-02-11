@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { createComment, deleteComment, editComment } from '../actions/commentActions';
-import { deletePosting, getPostingDetails } from '../actions/postingActions';
+import { deletePosting, getPostingDetails, likePosting } from '../actions/postingActions';
 import { profile } from '../actions/userActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
@@ -17,23 +17,21 @@ export default function Posting(props) {
     const { userInfo } = userLogin;
     const postingDelete = useSelector(state => state.postingDelete);
     const { loading: loadingDelete, error: errorDelete } = postingDelete;
+    const postingLike = useSelector(state => state.postingLike);
+    const { posting: postingLiked } = postingLike;
     const userProfile = useSelector(state => state.userProfile);
     const { user } = userProfile;
     const commentEdit = useSelector(state => state.commentEdit);
     const { loading: loadingCommentEdit, success: successCommentEdit, error: errorCommentEdit } = commentEdit;
     const commentDelete = useSelector(state => state.commentDelete);
     const { success: successCommentDelete, error: errorCommentDelete } = commentDelete;
+    
 
     const [ isOpen, setIsOpen ] = useState(false);
     const [ editFormOpen, setEditFormOpen ] = useState(false);
     const [text, setText] = useState('');
     const [textToEdit, setTextToEdit] = useState('');
-    // const [usernameEdit, setUsernameEdit] = useState('');
     const [commentToEdit, setCommentToEdit] = useState('');
-
-    // const redirectPath = props.location.search 
-    //     ? props.location.search.split('=')[1]
-    //     : '/';
 
     const deletePostingHandler = (posting) => {
         if (window.confirm(`Are you sure you wish to delete "${posting.title}"?`)) {
@@ -53,9 +51,7 @@ export default function Posting(props) {
 
     const editFormOpenHandler = (comment) => {
         setEditFormOpen(true)
-        // dispatch(profile(userInfo._id));
         setCommentToEdit(comment._id);
-        // setUsernameEdit(comment.author.username);
         setTextToEdit(comment.text);
     }
 
@@ -71,7 +67,7 @@ export default function Posting(props) {
 
     const renderComment = (comment) => {        
         return (
-            <div className="posting__comment" key={comment._id}>
+            <div className="posting__comment" key={comment._id+Date.toString()}>
                 <div className="posting__comment__author"> 
                     <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
                     <h3 className="posting__comment__username">{comment.author.username}</h3>
@@ -97,7 +93,8 @@ export default function Posting(props) {
         dispatch(getPostingDetails(postingId));
         setIsOpen(false);
         setText('');
-    }, [dispatch, postingId, successCommentDelete, successCommentEdit, userInfo])
+  
+    }, [dispatch, postingId, successCommentDelete, successCommentEdit,  userInfo])
 
     return (
         <div className="container__long">
@@ -146,6 +143,9 @@ export default function Posting(props) {
                         <span dangerouslySetInnerHTML={{ __html: posting.text }} />
                     </p>
                     <p className="margin__vertical__big">{posting.hashtags && posting.hashtags.map(hashtag => <span style={{marginRight: '.5rem'}}>#{hashtag}</span>)}</p>
+                    <div className="row between">
+                        <button className="posting__liked" onClick={() => dispatch(likePosting(postingId, userInfo._id))}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
+                    </div>
                     <div className="posting__bar"></div>
                     <div className="posting__comments">
                         <p>{posting.comments && posting.comments.map(comment => renderComment(comment))}</p>
