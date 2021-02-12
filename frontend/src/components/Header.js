@@ -31,12 +31,12 @@ export default function Header() {
         }
     };
 
-    // window.addEventListener('click', (e) => {
-    //     if (!document.getElementById('header').contains(e.target)) {
-    //         setDropdown("none");
-    //         setDisplay("none");
-    //     }
-    // });
+    window.addEventListener('click', (e) => {
+        if (!document.getElementById('header').contains(e.target)) {
+            setDropdown("none");
+            setDisplay("none");
+        }
+    });
 
     useEffect(() => {
         if (userInfo) {
