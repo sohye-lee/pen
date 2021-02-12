@@ -360,6 +360,7 @@ html {
     width: 100%;
     height: 100%;
     display: flex;
+    overflow-y: hidden;
 }
 
 .main__horizontal {
@@ -371,20 +372,33 @@ html {
     display: flex;
 }
 
+.main__blog {
+    width: 40% ;
+    min-width: 37rem ;
+    position: relative;
+    display: flex;
+    padding: 1.5rem 1rem 0 0;
+    margin-right: 2.5rem; 
+    /* padding-bottom: 0;
+    margin-bottom: 0; */
+    /* border-right: 1px dashed var(--LightGray);
+    padding-right: 2rem;; */
+}
+
 .main__category {
     position: relative;
     display: flex;
-    padding-top: 1.5rem;
-    margin-right: 2.5rem;
-    padding-bottom: 0;
+    padding: 1.5rem 1rem 0 0;
+    margin-right: 2rem;
     margin-bottom: 0;
     width: 30%;
     min-width: 30rem;
 }
 
-.main__category * {
+.main__category *, .main__blog * {
     color: var(--Black);
 }
+
 
 .main__posting {
     width: 100%;
@@ -512,10 +526,10 @@ html {
 
 .grid__item {
     max-width: 30rem;
-    height: 32rem;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    margin: 0 auto 2rem auto;
+    padding-bottom: 1rem;
 }
 
 .grid__item * {

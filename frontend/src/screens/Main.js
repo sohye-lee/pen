@@ -4,11 +4,19 @@ import { postingGetList } from '../actions/postingActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
+import { blogGetList } from '../actions/blogActions';
+import { getFollows } from '../actions/followActions';
 
-export default function Main() {
+export default function Main({search}) {
     const dispatch = useDispatch();
     const postingList = useSelector(state => state.postingList);
     const { loading: loadingPostings, postings, error: errorPostings } = postingList;
+    const blogList = useSelector(state => state.blogList);
+    const { loading: loadingBlogs, blogs, error: errorBlogs } = blogList;
+    const featuredBlogs =  blogs && blogs.filter(blog => blog.featured === true);
+    const followList = useSelector(state => state.followList);
+    const { follows } = followList;
+
     let selectedCategories = []
     postings && postings.forEach((posting) => {
         if (!selectedCategories.includes(posting.category)) {
@@ -66,16 +74,52 @@ export default function Main() {
         )
     };
 
+    const renderFeaturedBlogs = (blog) => {
+        const blogFollows = follows.filter(follow => follow.blogs.includes(blog._id));
+        
+        return (
+            <div className="main__posting" key={blog._id}>
+                <Link to={`/blogs/${blog._id}`}>
+                    <img className="content__img" src={blog.image} alt="sectionimage"/> 
+                    <h3 className="content__title">{blog.title}</h3>
+                </Link>
+                <div className="row right content__subtitle">
+                    <p className="content__text">- {blog.author.username}</p>
+                </div>
+                <div className="content__subtitle">
+                    <h4 className="content__text row left">{blog.description}</h4>
+                    <Link to={`/blogs/${blog._id}`}>
+                        <h5 className="grid__item__readmore content__text margin__vertical__small">know more</h5>
+                    </Link>
+                </div>
+                <div className="row between">
+                    <p>{postings.filter(posting => posting.blog._id === blog._id).length} stories</p>
+                    <p>followed by {blogFollows.length} readers</p>
+                </div>
+            </div>
+        )
+    }
+
     useEffect(() => {
         dispatch(postingGetList());
+        dispatch(blogGetList());
+        dispatch(getFollows());
     },[dispatch]);
     
     return (
         <div className="main__container">
-            {loadingPostings && <Loading />}
+            <h1>{search}</h1>
+            {(loadingPostings || loadingBlogs )&& <Loading />}
             {errorPostings && <Message message="error">{errorPostings}</Message>}
-            {postings &&
+            {errorBlogs && <Message message="error">{errorBlogs}</Message>}
+            {postings && blogs &&
             <div className="main__horizontal">
+                <div className="main__blog ">
+                    <div className="section__title">featured blogs <span className="title__tab">ii</span></div>
+                    <div className="section__content">
+                        {featuredBlogs.map(blog => renderFeaturedBlogs(blog))}
+                    </div>
+                </div>
                 {selectedCategories.map(category => renderCategory(category))}
             </div>}
         </div>

@@ -65,6 +65,12 @@ export default function Posting(props) {
         dispatch(deleteComment(postingId, commentId))
     }
 
+    const likePostingHandler = (postingId, userId) => {
+        if (userId !== posting.author._id) {
+            dispatch(likePosting(postingId, userId));
+        }
+    };
+
     const renderComment = (comment) => {        
         return (
             <div className="posting__comment" key={comment._id+Date.toString()}>
@@ -144,7 +150,7 @@ export default function Posting(props) {
                     </p>
                     <p className="margin__vertical__big">{posting.hashtags && posting.hashtags.map(hashtag => <span style={{marginRight: '.5rem'}}>#{hashtag}</span>)}</p>
                     <div className="row between">
-                        <button className="posting__liked" onClick={() => dispatch(likePosting(postingId, userInfo._id))}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
+                        <button className="posting__liked" onClick={() => likePostingHandler(postingId, userInfo._id)}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
                     </div>
                     <div className="posting__bar"></div>
                     <div className="posting__comments">

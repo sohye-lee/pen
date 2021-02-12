@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { logout } from '../actions/userActions';
 
-export default function Header() {
+export default function Header({search, setSearch}) {
+    const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
-    const dispatch = useDispatch();
+    const [currentSearch, setCurrentSearch] = useState();
+    const initial = useRef(true);
 
     const logoutHandler = () => {
         dispatch(logout());
@@ -42,7 +44,19 @@ export default function Header() {
         if (userInfo) {
             setDropdown("none");
         }
-    }, [userInfo]);
+
+        if (initial.current) {
+            initial.current = false;
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setSearch(currentSearch)
+        }, 500)
+
+        return () => clearTimeout(timer);
+
+    }, [userInfo, currentSearch, setSearch]);
 
     return (
         <div className="header__container row" id="header">
@@ -57,7 +71,13 @@ export default function Header() {
                         ? 
                         <div className="row right">
                             <div className="header__item row right">
-                                <input type="text" className="form__input search"/>
+                                <input 
+                                    type="text" 
+                                    className="form__input search" 
+                                    value={search} 
+                                    placeholder="search postings" 
+                                    onChange={e => setCurrentSearch(e.currentTarget.value)}
+                                />
                                 <i className="fa fa-search" aria-hidden="true"/>
                             </div>
                             <Link className="header__item" to="/login">login</Link>

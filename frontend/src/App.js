@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom';
 import Footer from './components/Footer'
 import Header from './components/Header'
@@ -14,15 +14,20 @@ import EditPosting from './screens/EditPosting';
 import Posting from './screens/Posting';
 import Main from './screens/Main';
 import Follows from './screens/Follows';
+import Search from './screens/Search';
 
 
 export default function App() {
+    const [search, setSearch] = useState();
+
     return (
         <BrowserRouter>
             <div className="app__container">
-                <Header />
+                <Header search={search} setSearch={setSearch} />
                 <div className="app__content">
-                    <Route path="/" component={Main} exact/>
+                    <Route path="/search" component={(props) => <Search {...props} search={search} {...props}/>} />
+                    <Route path="/" render={(props) => <Main {...props} search={search}/>} exact/>
+                    {/* <Route path="/" component={Main} exact/> */}
                     <Route path="/signup" component={Signup} />
                     <Route path="/login" component={Login} />
                     <Route path="/profile" component={Profile} />
@@ -34,6 +39,7 @@ export default function App() {
                     <Route path="/postings/:postingId" component={Posting} exact />
                     <Route path="/postings/:postingId/edit" component={EditPosting} exact />
                     <Route path="/follows" component={Follows} />
+                    
                 </div>
                 <Footer />
             </div>

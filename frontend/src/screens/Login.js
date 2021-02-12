@@ -49,7 +49,7 @@ export default function Login(props) {
                 <div className="row">
                     <input 
                         className="form__input"
-                        type="text"
+                        type="password"
                         id="password"
                         placeholder="password"
                         value={password}

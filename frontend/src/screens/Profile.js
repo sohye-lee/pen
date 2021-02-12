@@ -89,7 +89,7 @@ export default function Profile(props) {
                     <div className="row">
                         <input 
                             className="form__input"
-                            type="text"
+                            type="password"
                             id="password"
                             placeholder="password"
                             value={password}
@@ -99,7 +99,7 @@ export default function Profile(props) {
                     <div className="row">
                         <input 
                             className="form__input"
-                            type="text"
+                            type="password"
                             id="confirmPassword"
                             placeholder="confirm your password"
                             value={confirmPassword}

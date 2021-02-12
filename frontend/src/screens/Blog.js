@@ -25,12 +25,6 @@ export default function Blog(props) {
     const followAdd = useSelector(state => state.followAdd);
     const { success: successFollowAdd } = followAdd;
     
-    // let followsForThisBlog = [];
-    // follows && follows.forEach((each) => {
-    //     if (each.blogs.filter(blog => blog === blogId).length > 0) {
-    //         followsForThisBlog.push(each);
-    //     }
-    // })
     const followsForThisBlog = follows && follows.filter(follow => follow.blogs.includes(blogId));
 
     const followHandler = () => {
@@ -68,7 +62,10 @@ export default function Blog(props) {
                         />
                     </h4>
                 </Link>
-                    <a className="content__text" href={`/postings/${posting._id}`}><h6 className="content__text grid__item__readmore">read more</h6></a>
+                <Link className="content__text" to={`/postings/${posting._id}`}><h6 className="content__text grid__item__readmore">read more</h6></Link>
+                <div className="row left margin__vertical__small">
+                    <p style={{fontSize: '.9rem'}}>{posting.liked.length} liked</p>
+                </div>
 
                 {/* If user is author, buttons appear */}
                 {userInfo && userInfo._id === blog.author._id
