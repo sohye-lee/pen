@@ -42,7 +42,7 @@ export default function Posting(props) {
 
     const openFormHandler = () => {
         setIsOpen(true);
-        dispatch(profile(userInfo._id));
+        userInfo && dispatch(profile(userInfo._id));
     };
 
     const leaveCommentHandler = () => {
@@ -72,6 +72,7 @@ export default function Posting(props) {
     };
 
     const renderComment = (comment) => {        
+        const postedDate = RenderDate(comment.createdAt);
         return (
             <div className="posting__comment" key={comment._id+Date.toString()}>
                 <div className="posting__comment__author"> 
@@ -79,10 +80,10 @@ export default function Posting(props) {
                     <h3 className="posting__comment__username">{comment.author.username}</h3>
                 </div>
                 <div className="posting__comment__content">
-                    <p className="posting__comment__text">{comment.text}</p>
-                    <p className="posting__comment__date">{RenderDate(comment.createdAt)}</p>
+                    <h6 className="posting__comment__text">{comment.text}</h6>
+                    <h6 className="posting__comment__date">{postedDate}</h6>
                 </div>
-                {userInfo._id === comment.author._id &&
+                {userInfo && userInfo._id === comment.author._id &&
                 <div className="content__buttons row right">
                     <button className="grid__item__btn btn" onClick={() => editFormOpenHandler(comment)}><i className="fa fa-pencil" /></button>
                     <button className="grid__item__btn btn" onClick={() => deleteCommentHandler(comment._id)}><i className="fa fa-trash-o" /></button>
@@ -95,7 +96,12 @@ export default function Posting(props) {
         alert("Cannot delete your comment. Please try again!")
     }
 
+     if (props.search && props.search !== "") {
+            props.history.push('/');
+        }
+
     useEffect(() => {
+       
         dispatch(getPostingDetails(postingId));
         setIsOpen(false);
         setText('');
@@ -112,7 +118,7 @@ export default function Posting(props) {
 
                 {/* POSTING HEADER */}
                 <div className="page__header black">
-                    <Link to={`/category/${posting.category}`}><h5 className="page__corner__right posting__category">CATEGORY / {posting.category.toUpperCase()}</h5></Link>
+                    <a href={`/category/${posting.category}`}><h5 className="page__corner__right posting__category">CATEGORY / {posting.category.toUpperCase()}</h5></a>
                     <div className="posting__header">
                         <div className="posting__header__content">
                             <h5 className="row left content__text margin__vertical__big">{RenderDate(posting.createdAt)}</h5>
@@ -150,11 +156,11 @@ export default function Posting(props) {
                     </p>
                     <p className="margin__vertical__big">{posting.hashtags && posting.hashtags.map(hashtag => <span style={{marginRight: '.5rem'}}>#{hashtag}</span>)}</p>
                     <div className="row between">
-                        <button className="posting__liked" onClick={() => likePostingHandler(postingId, userInfo._id)}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
+                        <button className="posting__liked" onClick={() => userInfo && likePostingHandler(postingId, userInfo._id)}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
                     </div>
                     <div className="posting__bar"></div>
                     <div className="posting__comments">
-                        <p>{posting.comments && posting.comments.map(comment => renderComment(comment))}</p>
+                        <h6>{posting.comments && posting.comments.map(comment => renderComment(comment))}</h6>
                     </div>
 
                     {/* Button : if click, comment form opens and button disappear */}

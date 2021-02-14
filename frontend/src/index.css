@@ -930,8 +930,16 @@ html {
         font-size: 2.5rem !important;
     }
 
+    .header__loginout {
+        display: flex;
+    }
+
     .header__item {
         font-size: 1.1rem;
+    }
+
+    .login {
+        margin: 0 1rem;
     }
 
     .header__category {

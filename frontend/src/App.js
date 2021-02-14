@@ -18,16 +18,17 @@ import Search from './screens/Search';
 
 
 export default function App() {
-    const [search, setSearch] = useState();
+    const [search, setSearch] = useState('');
 
     return (
         <BrowserRouter>
             <div className="app__container">
-                <Header search={search} setSearch={setSearch} />
+                <Header setSearch={setSearch} />
                 <div className="app__content">
-                    <Route path="/search" component={(props) => <Search {...props} search={search} {...props}/>} />
+                    {search && search !== "" ? 
+                    <Route path="/" render={(props) => <Search {...props} search={search}  />} exact /> :
                     <Route path="/" render={(props) => <Main {...props} search={search}/>} exact/>
-                    {/* <Route path="/" component={Main} exact/> */}
+                    }
                     <Route path="/signup" component={Signup} />
                     <Route path="/login" component={Login} />
                     <Route path="/profile" component={Profile} />
@@ -36,7 +37,7 @@ export default function App() {
                     <Route path="/write" component={CreatePosting} />
                     <Route path="/blogs/:blogId" component={Blog} exact/>
                     <Route path="/blogs/:blogId/edit" component={EditBlog} exact />
-                    <Route path="/postings/:postingId" component={Posting} exact />
+                    <Route path="/postings/:postingId" component={(props) => <Posting {...props} search={search} />} exact />
                     <Route path="/postings/:postingId/edit" component={EditPosting} exact />
                     <Route path="/follows" component={Follows} />
                     

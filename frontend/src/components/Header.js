@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { logout } from '../actions/userActions';
 
-export default function Header({search, setSearch}) {
+export default function Header({setSearch}) {
     const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
-    const [currentSearch, setCurrentSearch] = useState();
+    const [currentSearch, setCurrentSearch] = useState('');
     const initial = useRef(true);
 
     const logoutHandler = () => {
@@ -45,6 +45,7 @@ export default function Header({search, setSearch}) {
             setDropdown("none");
         }
 
+   
         if (initial.current) {
             initial.current = false;
             return;
@@ -62,33 +63,29 @@ export default function Header({search, setSearch}) {
         <div className="header__container row" id="header">
             <div className="header__content row between">
                 <div className="header__left">
-                        <Link to="/" className="header__item logo">pen</Link>
+                        <Link to="/" className="header__item logo" onClick={() => setCurrentSearch('')}>pen</Link>
                 </div>
                 <div className="header__right row right">
                     <div className="row right">
                         
-                        {!userInfo
-                        ? 
+                        
                         <div className="row right">
                             <div className="header__item row right">
                                 <input 
                                     type="text" 
                                     className="form__input search" 
-                                    value={search} 
-                                    placeholder="search postings" 
-                                    onChange={e => setCurrentSearch(e.currentTarget.value)}
+                                    value={currentSearch} 
+                                    placeholder="search"
+                                    onChange={e => setCurrentSearch(e.target.value)}
                                 />
                                 <i className="fa fa-search" aria-hidden="true"/>
                             </div>
-                            <Link className="header__item" to="/login">login</Link>
-                            <Link className="header__item" to="/signup">signup</Link>
-                        </div>
-                        : 
-                        <div className="row right">
-                            <div className="header__item row right">
-                                <input type="text" className="form__input search"/>
-                                <i className="fa fa-search" aria-hidden="true"/>
+                            {!userInfo ?
+                            <div className="header__loginout">
+                                <Link className="header__item login" to="/login">login</Link>
+                                <Link className="header__item login" to="/signup">signup</Link>
                             </div>
+                            :
                             <div>
                                 <div 
                                     className="header__item profile" 
@@ -104,8 +101,10 @@ export default function Header({search, setSearch}) {
                                     <Link className="header__item" to="/" onClick={logoutHandler}>logout</Link>
                                 </div>
                             </div>
+                            }
+                            
                         </div>
-                        }
+                        
                         <div onClick={displayToggler}>
                             <div>
                                 <div className="header__bar"></div>
