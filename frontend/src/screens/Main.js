@@ -55,7 +55,8 @@ export default function Main({search}) {
                     ))}</p>
                 </div>
                 <div className="row left ">
-                    <p style={{fontSize: '.9rem'}}>{posting.liked.length} liked</p>
+                    <p className="content__liked">{posting.liked.length} liked</p>
+                    <p className="content__liked">{posting.comments.length} comments</p>
                 </div>
             </div>
         )
@@ -75,7 +76,7 @@ export default function Main({search}) {
     };
 
     const renderFeaturedBlogs = (blog) => {
-        const blogFollows = follows.filter(follow => follow.blogs.includes(blog._id));
+        const blogFollows = follows && follows.filter(follow => follow.blogs.includes(blog._id));
         
         return (
             <div className="main__posting" key={blog._id}>
@@ -93,8 +94,8 @@ export default function Main({search}) {
                     </Link>
                 </div>
                 <div className="row between">
-                    <p>{postings.filter(posting => posting.blog._id === blog._id).length} stories</p>
-                    <p>followed by {blogFollows.length} readers</p>
+                    <p className="content__liked">{postings.filter(posting => posting.blog._id === blog._id).length} stories</p>
+                    <p className="content__liked">followed by {blogFollows.length} readers</p>
                 </div>
             </div>
         )

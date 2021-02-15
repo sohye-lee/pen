@@ -8,6 +8,28 @@ import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { RenderDate } from '../components/RenderDate';
 
+function RenderComment ({comment, userId, editFormOpenHandler, deleteCommentHandler}) {        
+
+    const postedDate = RenderDate(comment.createdAt);
+    return (
+        <div className="posting__comment" >
+            <div className="posting__comment__author"> 
+                <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
+                <h3 className="posting__comment__username">{comment.author.username}</h3>
+            </div>
+            <div className="posting__comment__content">
+                <h5 className="posting__comment__text">{comment.text}</h5>
+                <h5 className="posting__comment__date">{postedDate}</h5>
+            </div>
+            {userId === comment.author._id &&
+            <div className="content__buttons row right">
+                <button className="grid__item__btn btn" onClick={() => editFormOpenHandler(comment)}><i className="fa fa-pencil" /></button>
+                <button className="grid__item__btn btn" onClick={() => deleteCommentHandler(comment._id)}><i className="fa fa-trash-o" /></button>
+            </div>}
+        </div>
+    );
+};
+
 export default function Posting(props) {
     const dispatch = useDispatch();
     const postingId = props.match.params.postingId;
@@ -71,26 +93,26 @@ export default function Posting(props) {
         }
     };
 
-    const renderComment = (comment) => {        
-        const postedDate = RenderDate(comment.createdAt);
-        return (
-            <div className="posting__comment" key={comment._id+Date.toString()}>
-                <div className="posting__comment__author"> 
-                    <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
-                    <h3 className="posting__comment__username">{comment.author.username}</h3>
-                </div>
-                <div className="posting__comment__content">
-                    <h6 className="posting__comment__text">{comment.text}</h6>
-                    <h6 className="posting__comment__date">{postedDate}</h6>
-                </div>
-                {userInfo && userInfo._id === comment.author._id &&
-                <div className="content__buttons row right">
-                    <button className="grid__item__btn btn" onClick={() => editFormOpenHandler(comment)}><i className="fa fa-pencil" /></button>
-                    <button className="grid__item__btn btn" onClick={() => deleteCommentHandler(comment._id)}><i className="fa fa-trash-o" /></button>
-                </div>}
-            </div>
-        );
-    }
+    // const renderComment = (comment) => {        
+    //     const postedDate = RenderDate(comment.createdAt);
+    //     return (
+    //         <div className="posting__comment" key={comment._id+Date.toString()}>
+    //             <div className="posting__comment__author"> 
+    //                 <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
+    //                 <h3 className="posting__comment__username">{comment.author.username}</h3>
+    //             </div>
+    //             <div className="posting__comment__content">
+    //                 <h6 className="posting__comment__text">{comment.text}</h6>
+    //                 <h6 className="posting__comment__date">{postedDate}</h6>
+    //             </div>
+    //             {userInfo && userInfo._id === comment.author._id &&
+    //             <div className="content__buttons row right">
+    //                 <button className="grid__item__btn btn" onClick={() => editFormOpenHandler(comment)}><i className="fa fa-pencil" /></button>
+    //                 <button className="grid__item__btn btn" onClick={() => deleteCommentHandler(comment._id)}><i className="fa fa-trash-o" /></button>
+    //             </div>}
+    //         </div>
+    //     );
+    // }
 
     if (errorCommentDelete) {
         alert("Cannot delete your comment. Please try again!")
@@ -122,7 +144,7 @@ export default function Posting(props) {
                     <div className="posting__header">
                         <div className="posting__header__content">
                             <h5 className="row left content__text margin__vertical__big">{RenderDate(posting.createdAt)}</h5>
-                            <Link to={`/users/${posting.author._id}`}> 
+                            <Link to={`/authors/${posting.author._id}`}> 
                                 <div className="row left">
                                     <img src={posting.author.image} className="thumbnail__xsmall" alt={posting.author.username} /> 
                                     <h4 className="posting__author">{posting.author.username}</h4>
@@ -154,13 +176,22 @@ export default function Posting(props) {
                     <p className="posting__text">
                         <span dangerouslySetInnerHTML={{ __html: posting.text }} />
                     </p>
-                    <p className="margin__vertical__big">{posting.hashtags && posting.hashtags.map(hashtag => <span style={{marginRight: '.5rem'}}>#{hashtag}</span>)}</p>
+                    <p className="margin__vertical__big">{posting.hashtags && posting.hashtags.map(hashtag => <span key={hashtag} style={{marginRight: '.5rem'}}>#{hashtag}</span>)}</p>
                     <div className="row between">
                         <button className="posting__liked" onClick={() => userInfo && likePostingHandler(postingId, userInfo._id)}>{postingLiked? postingLiked.liked.length + ' liked' : posting.liked? posting.liked.length + ' liked':'0 liked'}</button>
                     </div>
                     <div className="posting__bar"></div>
                     <div className="posting__comments">
-                        <h6>{posting.comments && posting.comments.map(comment => renderComment(comment))}</h6>
+                        {/* <h6>{posting.comments && posting.comments.map(comment => renderComment(comment))}</h6> */}
+                        {posting.comments && posting.comments.map(comment => 
+                                <RenderComment 
+                                    key={comment._id+Date.toString()}
+                                    comment={comment} 
+                                    userId={comment.author._id} 
+                                    editFormOpenHandler={editFormOpenHandler} 
+                                    deleteCommentHandler={deleteCommentHandler}
+                            />)} 
+                        
                     </div>
 
                     {/* Button : if click, comment form opens and button disappear */}
@@ -196,7 +227,6 @@ export default function Posting(props) {
                     {editFormOpen && 
                     (<form onSubmit={() => editCommentHandler(commentToEdit)} className="posting__comment__form">
                         <div className="row left posting__comment__author">
-                            {/* <img className="thumbnail__xsmall" src={user && user.image} alt="user" /> */}
                             <h3 className="posting__comment__username">Edit your comment, {userInfo.username}</h3>
                         </div>
                         <input 

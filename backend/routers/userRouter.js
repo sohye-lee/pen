@@ -70,7 +70,7 @@ userRouter.route('/login')
 
 
 userRouter.route('/:userId')
-.get(isAuth, (req,res,next) => {
+.get((req,res,next) => {
     User.findById(req.params.userId)
     .then(user => {
         res.statusCode = 200;

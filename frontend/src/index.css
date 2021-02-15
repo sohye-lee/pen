@@ -105,6 +105,10 @@ html {
     margin-left: 1rem;
 }
 
+.margin__left__big {
+    margin-left: 2rem;
+}
+
 .margin__vertical__small {
     margin: 1rem 0;
 }
@@ -709,6 +713,7 @@ html {
 
 .posting__comment__text {
     font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
     margin: .9rem 0;
 }
 
@@ -817,6 +822,13 @@ html {
     font-size: 1rem;
 }
 
+.content__liked {
+    font-size: .9rem;
+    margin-right: 1rem;
+    background: rgba(0,0,0,.1);
+    padding: .2rem;
+}
+
 /* ================== FORM ================== */
 .form__content {
     width: 80%;
@@ -916,6 +928,63 @@ html {
     /* font-size: 1.5rem; */
 }
 
+/* ================== AUTHOR PAGE ================== */
+.author__container {
+    width: 100%;
+    height: calc(100vh - 150px);
+    display: flex;
+}
+
+.author__left {
+    height: calc(100vh - 150px);
+    flex-basis: 20%;
+    min-width: 10rem;
+    /* background-color: var(--DarkGray); */
+    color: var(--Black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+
+.author__thumbnail {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    padding: 5px;
+    border: 1px solid var(--DarkGray);
+}
+
+.author__right {
+    flex-basis: 80%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-items: between;
+}
+
+.author__blogs, .author__postings {
+    overflow-y: scroll;
+    flex-basis: 50%;
+}
+
+.author__item {
+    padding: 1rem 2rem;
+    background-color: gray;
+    margin: 0;
+    border-bottom: 1px dashed var(--Gray);
+}
+
+.author__item__titlebox {
+    /* display: flex;
+    justify-items: flex-start;
+    align-items: center; */
+}
+
+.author__item__title {
+    font-size: 1.8rem;
+    margin-right: 2rem;
+}
 /* ================== RESPONSIVE ================== */
 
 @media all and (max-width: 1024px) {

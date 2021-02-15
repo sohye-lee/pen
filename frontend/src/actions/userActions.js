@@ -50,11 +50,12 @@ export const logout = () => async(dispatch) => {
 
 export const profile = (userId) => async(dispatch, getState) => {
     dispatch({ type: USER_PROFILE_REQUEST, payload: userId });
-    const { userLogin: { userInfo } } = getState();
+    // const { userLogin: { userInfo } } = getState();
     try {
-        const { data } = await Axios.get(`/users/${userId}`, {
-            headers: { Authorization: `Bearer ${userInfo.token}`}
-        });
+        // const { data } = await Axios.get(`/users/${userId}`, {
+        //     headers: { Authorization: `Bearer ${userInfo.token}`}
+        // });
+        const { data } = await Axios.get(`/users/${userId}`);
         dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: USER_PROFILE_FAIL, payload: error.message });

@@ -15,6 +15,7 @@ import Posting from './screens/Posting';
 import Main from './screens/Main';
 import Follows from './screens/Follows';
 import Search from './screens/Search';
+import Author from './screens/Author';
 
 
 export default function App() {
@@ -29,18 +30,18 @@ export default function App() {
                     <Route path="/" render={(props) => <Search {...props} search={search}  />} exact /> :
                     <Route path="/" render={(props) => <Main {...props} search={search}/>} exact/>
                     }
-                    <Route path="/signup" component={Signup} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/profile" component={Profile} />
-                    <Route path="/blogs" component={MyBlogs} exact />
-                    <Route path="/createblog" component={CreateBlog}/>
-                    <Route path="/write" component={CreatePosting} />
-                    <Route path="/blogs/:blogId" component={Blog} exact/>
-                    <Route path="/blogs/:blogId/edit" component={EditBlog} exact />
+                    <Route path="/signup" component={(props) => <Signup {...props} search={search} />} />
+                    <Route path="/login" component={(props) => <Login {...props} search={search} />} />
+                    <Route path="/profile" component={(props) => <Profile {...props} search={search}/>} />
+                    <Route path="/blogs" component={(props) => <MyBlogs {...props} search={search} />} exact />
+                    <Route path="/createblog" component={(props) => <CreateBlog {...props} search={search} />}/>
+                    <Route path="/write" component={(props) => <CreatePosting {...props} search={search} />} />
+                    <Route path="/blogs/:blogId" component={(props) => <Blog {...props} search={search} />} exact/>
+                    <Route path="/blogs/:blogId/edit" component={(props) => <EditBlog {...props} search={search} />} exact />
                     <Route path="/postings/:postingId" component={(props) => <Posting {...props} search={search} />} exact />
-                    <Route path="/postings/:postingId/edit" component={EditPosting} exact />
-                    <Route path="/follows" component={Follows} />
-                    
+                    <Route path="/postings/:postingId/edit" component={(props) => <EditPosting {...props} search={search} />} exact />
+                    <Route path="/follows" component={(props) => <Follows {...props} search={search} />} />
+                    <Route path="/authors/:userId" component={(props) => <Author {...props} search={search} />} />
                 </div>
                 <Footer />
             </div>

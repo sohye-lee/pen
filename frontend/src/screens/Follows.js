@@ -67,7 +67,7 @@ export default function Follows(props) {
                         {myFollow && myFollow.blogs.map(blog => renderFollowingBlog(blog))}
                     </div>
                 </div>}
-                {((!myFollow) || myFollow.blogs.length === 0) && <h3>You are not following any blog.</h3>}
+                {((!myFollow) || myFollow.blogs.length === 0) && <h3 className="follow__item row center">You are not following any blog.</h3>}
                 {loadingDelete && <Loading />}
                 {errorDelete && <Message message="error">{errorDelete}</Message>}
             </div>
