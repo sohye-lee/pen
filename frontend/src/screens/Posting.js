@@ -187,7 +187,7 @@ export default function Posting(props) {
                                 <RenderComment 
                                     key={comment._id+Date.toString()}
                                     comment={comment} 
-                                    userId={comment.author._id} 
+                                    userId={userInfo && userInfo._id} 
                                     editFormOpenHandler={editFormOpenHandler} 
                                     deleteCommentHandler={deleteCommentHandler}
                             />)} 

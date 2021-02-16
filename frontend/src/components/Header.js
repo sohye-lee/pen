@@ -34,7 +34,7 @@ export default function Header({setSearch}) {
     };
 
     window.addEventListener('click', (e) => {
-        if (!document.getElementById('header').contains(e.target)) {
+        if  (document.getElementById('header') && (!document.getElementById('header').contains(e.target))) {
             setDropdown("none");
             setDisplay("none");
         }

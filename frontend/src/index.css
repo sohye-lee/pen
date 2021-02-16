@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@100;400;600;700&family=Poppins:wght@100;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@100;400;600;700&family=Poppins:wght@100;400;600;800&family=Homemade+Apple&display=swap');
 
 /* ================== STYLE ELEMENTS SETTING ================== */
 :root {
@@ -231,9 +231,14 @@ html {
 
 .logo {
     font-size: 3rem !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-weight: 800 !important;
-    margin-right: 30px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    margin-right: 30px;
+    transition: all 1200ms ease;
+}
+
+.logo:hover {
+    font-family: 'Homemade Apple', cursive;
 }
 
 .header__item {
@@ -930,14 +935,19 @@ html {
 
 /* ================== AUTHOR PAGE ================== */
 .author__container {
-    width: 100%;
+    width: 70%;
+    margin: 0 auto;
     height: calc(100vh - 150px);
     display: flex;
 }
 
+.author__posting * {
+    color: var(--Black);
+}
+
 .author__left {
     height: calc(100vh - 150px);
-    flex-basis: 20%;
+    flex-basis: 30%;
     min-width: 10rem;
     /* background-color: var(--DarkGray); */
     color: var(--Black);
@@ -947,16 +957,36 @@ html {
     justify-items: center;
 }
 
+.author__profile {
+    max-width: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .author__thumbnail {
+    margin-top: 5rem;
     width: 7rem;
     height: 7rem;
     border-radius: 50%;
     padding: 5px;
-    border: 1px solid var(--DarkGray);
+    border-bottom: 2px solid var(--Blue);
+    border-top: 2px solid var(--Blue);
+    border-left: 2px solid var(--White);
+    border-right: 2px solid var(--White);
+}
+
+.author__text {
+    margin-top: 1rem;
+}
+
+.author__line {
+    margin-bottom: .5rem;
 }
 
 .author__right {
-    flex-basis: 80%;
+    flex-basis: 70%;
+    padding: 0 3rem;
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -965,7 +995,7 @@ html {
 
 .author__blogs, .author__postings {
     overflow-y: scroll;
-    flex-basis: 50%;
+    /* flex-basis: 50%; */
 }
 
 .author__item {
@@ -984,6 +1014,11 @@ html {
 .author__item__title {
     font-size: 1.8rem;
     margin-right: 2rem;
+}
+
+.author__posting {
+    padding: 2rem 0;
+    border-bottom: 1px dashed var(--LightGray);
 }
 /* ================== RESPONSIVE ================== */
 

@@ -110,7 +110,7 @@ export default function Blog(props) {
                     <h6 className="content__text">{blog.description}</h6>
                     <div className="row center margin__vertical__small">
                         <h4 className="content__text">followed by {followsForThisBlog.length > 1 ? followsForThisBlog.length+' readers' : followsForThisBlog.length+' reader'} 
-                        {followsForThisBlog && followsForThisBlog.filter(follow => follow.user === userInfo._id).length > 0
+                        {userInfo && followsForThisBlog && followsForThisBlog.filter(follow => follow.user === userInfo._id).length > 0
                             && <span className="italic"> - now following</span>}
                         </h4>
                         {userInfo  

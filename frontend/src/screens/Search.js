@@ -51,7 +51,7 @@ export default function Search({search}) {
                 <div className="row margin__left__big">
                     <h5 className="content__text margin__vertical__small">You searched  
                         <span style={{fontStyle: 'italic', fontWeight: '600'}}>
-                        {searchedPostings && searchedPostings.length > 0 ? '  "'+search + `" : ${searchedPostings.legnth} found` :  '  "'+search + '" : 0 found'}
+                        {searchedPostings && searchedPostings.length > 0 ? '  "'+search + `" : ${searchedPostings.length} found` :  '  "'+search + '" : 0 found'}
                         </span>
                     </h5>
                     
