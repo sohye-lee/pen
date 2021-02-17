@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogDetails, updateBlog } from '../actions/blogActions';
 import { CATEGORIES } from '../category';
@@ -38,6 +39,28 @@ export default function EditBlog(props) {
         setDescription(blog? blog.description : '');
         setImage(blog? blog.image : '');
     };
+
+    const [imageUploadLoading, setImageUploadLoading] = useState(false);
+    const [imageUploadError, setImageUploadError] = useState('');
+    const imageUploadHandler = async (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        setImageUploadLoading(true)
+        try {
+            const { data } = await Axios.post('/images', bodyFormData, {
+                headers: {
+                    'Content-Type': "multipart/form-data",
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            });
+            setImage(data);
+            setImageUploadLoading(false);
+        } catch (error) {
+            setImageUploadError(error.message);
+            setImageUploadLoading(false);
+        }
+    }
 
     if (!userInfo) {
         props.history.push('/login');
@@ -109,12 +132,13 @@ export default function EditBlog(props) {
                     <div className="row">
                         <input
                             className="form__input"
-                            type="text"
+                            type="file"
                             id="image"
                             placeholder="image"
-                            value={image}
-                            onChange={e => setImage(e.target.value)}
+                            onChange={imageUploadHandler}
                         />
+                        {imageUploadLoading && <Loading />}
+                        {imageUploadError && <Message message="error">{imageUploadError}</Message>}
                     </div>
                     <div className="row">
                         <button 
