@@ -9,20 +9,20 @@ const storage = multer.diskStorage({
         callback(null, 'images/');
     },
     filename (req, file, callback) {
-        callback(null, file.originalname);
+        callback(null, Date.now() + file.originalname);
     },
 })
 
-// const fileFilter = (req, file, callback) => {
-//     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-//     if(allowedFileTypes.includes(file.mimetype)) {
-//         callback(null, true);
-//     } else {
-//         callback(null, false);
-//     }
-// }
+const fileFilter = (req, file, callback) => {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if(allowedFileTypes.includes(file.mimetype)) {
+        callback(null, true);
+    } else {
+        callback(null, false);
+    }
+}
 
-const upload = multer({ storage });
+const upload = multer({ storage, fileFilter });
 
 imageRouter.route('/')
 .post(upload.single('image'), (req, res, next) => {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import Axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import { createPosting } from '../actions/postingActions';
 import { CATEGORIES } from '../category';
@@ -56,7 +57,30 @@ export default function CreatePosting(props) {
         dispatch(createPosting(title, blog, category, text, image, hashList));
     };
 
-    
+    const [imageUploadLoading, setImageUploadLoading] = useState(false);
+    const [imageUploadError, setImageUploadError] = useState('');
+
+    const imageUploadHandler = async (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        setImageUploadLoading(true);
+        try {
+            const { data } = await Axios.post('/images', bodyFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            });
+            setImageUploadLoading(false);
+            setImage(data);
+        } catch (error) {
+            setImageUploadLoading(false);
+            setImageUploadError(error.message);
+        }
+    }
+
+
     let isValid = false;
     if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {
         isValid = true;
@@ -152,12 +176,13 @@ export default function CreatePosting(props) {
                 <div className="row">
                     <input
                         className="form__input"
-                        type="text"
+                        type="file"
                         id="image"
                         placeholder="image"
-                        value={image}
-                        onChange={e => setImage(e.target.value)}
+                        onChange={imageUploadHandler}
                     />
+                    {imageUploadLoading && <Loading />}
+                    {imageUploadError && <Message message="error">{imageUploadError}</Message>}
                 </div>
                 <div className="row">
                     <input

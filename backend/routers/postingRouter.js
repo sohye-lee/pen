@@ -11,6 +11,7 @@ postingRouter.route('/')
     .populate('author')
     .populate('blog')
     .populate('comments.author')
+    .populate('category')
     .then(postings => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -21,6 +22,7 @@ postingRouter.route('/')
     Posting.create(req.body)
     .populate('author')
     .populate('blog')
+    .populate('category')
     .then(posting => {
         console.log('New Posting Created ', posting);
         res.statusCode = 200;
@@ -46,6 +48,7 @@ postingRouter.route('/:postingId')
     .populate('author')
     .populate('blog')
     .populate('comments.author')
+    .populate('category')
     .then(posting => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

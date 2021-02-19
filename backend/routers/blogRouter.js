@@ -7,6 +7,7 @@ blogRouter.route('/')
 .get((req,res,next) => {
     Blog.find({})
     .populate('author')
+    .populate('category')
     .then(blogs => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -46,6 +47,7 @@ blogRouter.route('/:blogId')
 .get((req,res,next) => {
     Blog.findById(req.params.blogId)
     .populate('author')
+    .populate('category')
     .then(blog => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

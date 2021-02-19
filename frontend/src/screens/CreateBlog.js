@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import Axios from 'axios';
 import { createBlog } from '../actions/blogActions';
 import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
@@ -34,6 +35,30 @@ export default function CreateBlog(props) {
         setDescription('');
         setImage('');
     };
+
+    const [imageUploadLoading, setImageUploadLoading] = useState(false);
+    const [imageUploadError, setImageUploadError] = useState('');
+    
+    const imageUploadHandler = async (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        
+        setImageUploadLoading(true)
+        try {
+            const { data } = await Axios.post('/images', bodyFormData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            })
+            setImageUploadLoading(false);
+            setImage(data);
+        } catch (error) {
+            setImageUploadLoading(false);
+            setImageUploadError(error.message);
+        }
+    }
 
     useEffect(() => {
         if (!userInfo) {
@@ -93,12 +118,13 @@ export default function CreateBlog(props) {
                 <div className="row">
                     <input
                         className="form__input"
-                        type="text"
+                        type="file"
                         id="image"
                         placeholder="image"
-                        value={image}
-                        onChange={e => setImage(e.target.value)}
+                        onChange={imageUploadHandler}
                     />
+                    {imageUploadLoading && <Loading />}
+                    {imageUploadError && <Message message="error">{imageUploadError}</Message>}
                 </div>
                 <div className="row">
                     <button className="form__btn btn" type="submit">create</button>

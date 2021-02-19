@@ -23,7 +23,8 @@ const postingSchema = mongoose.Schema({
         ref: 'Blog'
     },
     category: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
         required: true
     },
     title: {

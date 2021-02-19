@@ -62,7 +62,14 @@ userRouter.route('/login')
                     isAdmin: user.isAdmin,
                     token: generateToken(user)
                 })
+            } else {
+                res.statusCode = 401;
+                throw new Error("Password invalid. Please try again")
+            
             }
+        } else {
+            res.statusCode = 404;
+            res.end('User not found.');
         }
     })
     .catch(err => next(err));
