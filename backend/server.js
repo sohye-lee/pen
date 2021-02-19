@@ -12,6 +12,7 @@ import postingRouter from './routers/postingRouter.js';
 import userRouter from './routers/userRouter.js';
 import imageRouter from './routers/imageRouter.js'
 import { config } from './config.js';
+import categoryRouter from './routers/categoryRouter.js';
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url || 'mongodb://localhost:27017/pen', {
@@ -60,6 +61,7 @@ app.use('/blogs', blogRouter);
 app.use('/postings', postingRouter);
 app.use('/follows', followRouter);
 app.use('/images', imageRouter);
+app.use('/categories', categoryRouter);
 
 // CATCH 404 AND FORWARD TO ERROR HANDLER
 app.use((req, res, next) => {

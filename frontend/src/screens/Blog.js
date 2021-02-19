@@ -99,7 +99,7 @@ export default function Blog(props) {
                 {/* BLOG HEADER */}
                 <div className="page__header">
                     <img src={blog.image} className="page__image" alt={`${blog.title}`} />
-                    <h5 className="page__corner__left">CATEGORY / {blog.category.toUpperCase()}</h5>
+                    <h5 className="page__corner__left">CATEGORY / {blog.category.name.toUpperCase()}</h5>
                     <Link to={`/authors/${blog.author._id}`}>
                         <div className="page__author">
                             <h4 className="content__text margin__vertical__small">created on {RenderDate(blog.createdAt)}</h4>
