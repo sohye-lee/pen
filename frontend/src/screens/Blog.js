@@ -19,7 +19,8 @@ export default function Blog(props) {
     const { postings, loading: loadingPostings, error: errorPostings } = postingList;
     const postingDelete = useSelector(state => state.postingDelete);
     const { success: postingDeleteSuccess } = postingDelete;
-    const myPostings = postings && postings.filter(posting => posting.blog._id === blogId);
+    const myPostings = postings && postings.filter(posting => posting.blog === blogId);
+    // const myPostings = postings && postings.filter(posting => posting.blog._id === blogId);
     const followList = useSelector(state => state.followList);
     const { follows } = followList;
     const followAdd = useSelector(state => state.followAdd);

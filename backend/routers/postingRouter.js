@@ -10,8 +10,8 @@ postingRouter.route('/')
     Posting.find()
     .populate('author')
     .populate('blog')
-    .populate('comments.author')
     .populate('category')
+    .populate('comments.author')
     .then(postings => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -22,7 +22,6 @@ postingRouter.route('/')
     Posting.create(req.body)
     .populate('author')
     .populate('blog')
-    .populate('category')
     .then(posting => {
         console.log('New Posting Created ', posting);
         res.statusCode = 200;

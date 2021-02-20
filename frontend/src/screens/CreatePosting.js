@@ -10,6 +10,7 @@ import { POSTING_CREATE_RESET } from '../constants/postingConstants';
 import { blogGetList } from '../actions/blogActions';
 import { RenderHashtags } from '../components/RenderHashtags';
 import dotenv from 'dotenv';
+import { getCategoryList } from '../actions/categoryActions';
 
 dotenv.config();
 
@@ -33,8 +34,10 @@ export default function CreatePosting(props) {
     const myblogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
     const postingCreate = useSelector(state => state.postingCreate);
     const { loading, success, posting: postingCreated, error } = postingCreate;
-    const categories = CATEGORIES.map(category => (
-        <option value={category} key={category}>{category}</option>
+    const categoryList = useSelector(state => state.categoryList);
+    const { categories } = categoryList;
+    const categoryOptions = categories && categories.map(category => (
+        <option value={category._id} key={category._id}>{category.name}</option>
     ));
 
     const mybloglist = myblogs 
@@ -93,6 +96,7 @@ export default function CreatePosting(props) {
         }
         
         dispatch(blogGetList());
+        dispatch(getCategoryList());
 
         if (myblogs)  {
             if (myblogs.length === 0) {
@@ -104,6 +108,7 @@ export default function CreatePosting(props) {
         if (success) {
             alert('Your new story has been successfully created!');
             dispatch({ type: POSTING_CREATE_RESET });
+            dispatch(blogGetList());
             console.log(postingCreated._id)
             resetHandler();
             props.history.push(`/postings/${postingCreated._id}`);
@@ -149,7 +154,7 @@ export default function CreatePosting(props) {
                         onChange={e => setCategory(e.target.value)}
                     >
                         <option defaultValue={true} value=''>select category</option>
-                        {categories}
+                        {categoryOptions}
                     </select>
                 </div>
                 <div className="row">

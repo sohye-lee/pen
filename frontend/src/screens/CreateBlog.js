@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
 import { createBlog } from '../actions/blogActions';
-import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { BLOG_CREATE_RESET } from '../constants/blogConstants';
+import { getCategoryList } from '../actions/categoryActions';
 
 export default function CreateBlog(props) {
     const dispatch = useDispatch();
@@ -17,11 +17,14 @@ export default function CreateBlog(props) {
     const { userInfo } = userLogin;
     const blogCreate = useSelector(state => state.blogCreate);
     const { loading, success, blog: blogCreated, error } = blogCreate; 
+    const categoryList = useSelector(state => state.categoryList);
+    const { categories } = categoryList;
     const redirect = props.location.search
         ? props.location.search.split('=')[1]
         : '/';
-    const categories = CATEGORIES.map(category => (
-        <option value={category} key={category}>{category}</option>
+
+    const categoryOptions = categories && categories.map(category => (
+        <option value={category._id} key={category._id}>{category.name}</option>
     ))
 
     const submitHandler = (e) => {
@@ -64,6 +67,7 @@ export default function CreateBlog(props) {
         if (!userInfo) {
             props.history.push('/login');
         };
+        dispatch(getCategoryList());
         if (success) {
             alert(`Your new blog ${blogCreated.title} has been created!`);
             dispatch({ type: BLOG_CREATE_RESET });
@@ -102,7 +106,7 @@ export default function CreateBlog(props) {
                         value={category}
                     >
                         <option defaultValue={true} value="">select category</option>
-                        {categories}
+                        {categoryOptions}
                     </select>
                 </div>
                 <div className="row">

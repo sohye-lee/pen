@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import { Link } from 'react-router-dom';
 import { blogGetList } from '../actions/blogActions';
 import { getFollows } from '../actions/followActions';
+// import { getCategoryList } from '../actions/categoryActions';
 
 export default function Main({search}) {
     const dispatch = useDispatch();
@@ -16,11 +17,13 @@ export default function Main({search}) {
     const featuredBlogs =  blogs && blogs.filter(blog => blog.featured === true);
     const followList = useSelector(state => state.followList);
     const { follows } = followList;
+    // const categoryList = useSelector(state => state.categoryList);
+    // const { loading: loadingCategories, categories, error: errorCategories } = categoryList;
 
     let selectedCategories = []
     postings && postings.forEach((posting) => {
-        if (!selectedCategories.includes(posting.category)) {
-            selectedCategories.push(posting.category);
+        if (!selectedCategories.includes(posting.category.name)) {
+            selectedCategories.push(posting.category.name);
         }
     });
 
@@ -62,11 +65,11 @@ export default function Main({search}) {
         )
     }
 
-    const renderCategory = (category) => {
-        const postingsInCategory = postings.filter(posting => posting.category === category);
+    const renderCategory = (categoryname) => {
+        const postingsInCategory = postings.filter(posting => posting.category.name === categoryname);
         return (
-            <div className="main__category" key={category}>
-                <div className="section__title">{category} <span className="title__tab">ii</span></div>
+            <div className="main__category" key={categoryname}>
+                <div className="section__title">{categoryname} <span className="title__tab">ii</span></div>
                 <div className="section__content">
                     {postingsInCategory && postingsInCategory.length > 0
                     && postingsInCategory.map(posting => renderPosting(posting))}
@@ -94,7 +97,8 @@ export default function Main({search}) {
                     </Link>
                 </div>
                 <div className="row between">
-                    <p className="content__liked">{postings.filter(posting => posting.blog._id === blog._id).length} stories</p>
+                    {/* <p className="content__liked">{postings && postings.filter(posting => posting.blog === blog._id).length} stories</p> */}
+                    <p className="content__liked">{postings && postings.filter(posting => posting.blog._id === blog._id).length} stories</p>
                     <p className="content__liked">followed by {blogFollows.length} readers</p>
                 </div>
             </div>
@@ -105,6 +109,7 @@ export default function Main({search}) {
         dispatch(postingGetList());
         dispatch(blogGetList());
         dispatch(getFollows());
+        // dispatch(getCategoryList());
     },[dispatch]);
     
     return (
@@ -118,10 +123,10 @@ export default function Main({search}) {
                 <div className="main__blog ">
                     <div className="section__title">featured blogs <span className="title__tab">ii</span></div>
                     <div className="section__content">
-                        {featuredBlogs.map(blog => renderFeaturedBlogs(blog))}
+                        {featuredBlogs && featuredBlogs.map(blog => renderFeaturedBlogs(blog))}
                     </div>
                 </div>
-                {selectedCategories.map(category => renderCategory(category))}
+                {selectedCategories && selectedCategories.map(category => renderCategory(category))}
             </div>}
         </div>
     )

@@ -93,27 +93,6 @@ export default function Posting(props) {
         }
     };
 
-    // const renderComment = (comment) => {        
-    //     const postedDate = RenderDate(comment.createdAt);
-    //     return (
-    //         <div className="posting__comment" key={comment._id+Date.toString()}>
-    //             <div className="posting__comment__author"> 
-    //                 <img src={comment.author.image} className="thumbnail__xsmall" alt={comment.author.username} />
-    //                 <h3 className="posting__comment__username">{comment.author.username}</h3>
-    //             </div>
-    //             <div className="posting__comment__content">
-    //                 <h6 className="posting__comment__text">{comment.text}</h6>
-    //                 <h6 className="posting__comment__date">{postedDate}</h6>
-    //             </div>
-    //             {userInfo && userInfo._id === comment.author._id &&
-    //             <div className="content__buttons row right">
-    //                 <button className="grid__item__btn btn" onClick={() => editFormOpenHandler(comment)}><i className="fa fa-pencil" /></button>
-    //                 <button className="grid__item__btn btn" onClick={() => deleteCommentHandler(comment._id)}><i className="fa fa-trash-o" /></button>
-    //             </div>}
-    //         </div>
-    //     );
-    // }
-
     if (errorCommentDelete) {
         alert("Cannot delete your comment. Please try again!")
     }
@@ -140,7 +119,7 @@ export default function Posting(props) {
 
                 {/* POSTING HEADER */}
                 <div className="page__header black">
-                    <a href={`/category/${posting.category}`}><h5 className="page__corner__right posting__category">CATEGORY / {posting.category.toUpperCase()}</h5></a>
+                    <a href={`/category/${posting.category.name}`}><h5 className="page__corner__right posting__category">CATEGORY / {posting.category.name.toUpperCase()}</h5></a>
                     <div className="posting__header">
                         <div className="posting__header__content">
                             <h5 className="row left content__text margin__vertical__big">{RenderDate(posting.createdAt)}</h5>

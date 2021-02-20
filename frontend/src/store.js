@@ -7,7 +7,16 @@ import {
   blogListReducer, 
   blogUpdateReducer
 } from './reducers/blogReducers';
-import { commentCreateReducer, commentDeleteReducer, commentEditReducer } from './reducers/commentReducers';
+import { 
+  categoryAddReducer, 
+  categoryDeleteReducer, 
+  categoryListReducer 
+} from './reducers/categoryReducers';
+import { 
+  commentCreateReducer, 
+  commentDeleteReducer, 
+  commentEditReducer 
+} from './reducers/commentReducers';
 import { 
   followAddReducer,
   followDeleteReducer,
@@ -59,6 +68,9 @@ const reducer = combineReducers({
     commentCreate: commentCreateReducer,
     commentEdit: commentEditReducer,
     commentDelete: commentDeleteReducer,
+    categoryList: categoryListReducer,
+    categoryAdd: categoryAddReducer,
+    categoryDelete: categoryDeleteReducer,
 });
 
 

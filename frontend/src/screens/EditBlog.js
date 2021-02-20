@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogDetails, updateBlog } from '../actions/blogActions';
-import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { BLOG_UPDATE_RESET } from '../constants/blogConstants';
+import { getCategoryList } from '../actions/categoryActions';
 
 export default function EditBlog(props) {
     const dispatch = useDispatch();
@@ -15,17 +15,18 @@ export default function EditBlog(props) {
     const { loading: loadingBlogDetails, blog, error: errorBlogDetails } = blogDetails;
 
     const [title, setTitle] = useState(blog? blog.title : '');
-    const [category, setCategory] = useState(blog? blog.category : '');
+    const [category, setCategory] = useState(blog? blog.category._id : '');
     const [description, setDescription] = useState(blog? blog.description : '');
     const [image, setImage] = useState(blog? blog.image : '/noimage.jpg');
-
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const blogUpdate = useSelector(state => state.blogUpdate);
     const { loading: loadingUpdate, blog: blogUpdated, success: successUpdate, error: errorUpdate } = blogUpdate;
+    const categoryList = useSelector(state => state.categoryList);
+    const { categories } = categoryList;
 
-    const categories = CATEGORIES.map(category => ( 
-        <option value={category} key={category}>{category}</option>
+    const categoryOptions = categories && categories.map(category => ( 
+        <option value={category._id} key={category._id}>{category.name}</option>
     ))
 
     const submitHandler = (e) => {
@@ -35,7 +36,7 @@ export default function EditBlog(props) {
  
     const resetHandler = () => {
         setTitle(blog? blog.title : '');
-        setCategory(blog? blog.category : '');
+        setCategory(blog? blog.category._id : '');
         setDescription(blog? blog.description : '');
         setImage(blog? blog.image : '');
     };
@@ -68,11 +69,12 @@ export default function EditBlog(props) {
 
     useEffect(() => {
         dispatch(getBlogDetails(blogId));
+        dispatch(getCategoryList());
         if (successUpdate) {
             alert('Your blog has been successfully updated!');
             dispatch(getBlogDetails(blogId));
             setTitle(blogUpdated ? blogUpdated.title : '');
-            setCategory(blogUpdated ? blogUpdated.category : '');
+            setCategory(blogUpdated ? blogUpdated.category.name : '');
             setDescription(blogUpdated ? blogUpdated.description : '');
             setImage(blogUpdated ? blogUpdated.image : '/noimage.jpg');
             props.history.push(`/blogs/${blogId}`);
@@ -116,7 +118,7 @@ export default function EditBlog(props) {
                             value={category}
                         >
                             <option defaultValue={true} value="">select category</option>
-                            {categories}
+                            {categoryOptions}
                         </select>
                     </div>
                     <div className="row">

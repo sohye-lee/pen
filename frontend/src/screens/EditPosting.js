@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '@tinymce/tinymce-react';
 import Axios from 'axios';
 import { getPostingDetails, updatePosting } from '../actions/postingActions';
-import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { blogGetList } from '../actions/blogActions';
 import { RenderHashtags } from '../components/RenderHashtags';
 import dotenv from 'dotenv';
 import { POSTING_UPDATE_RESET } from '../constants/postingConstants';
+import { getCategoryList } from '../actions/categoryActions';
 
 dotenv.config();
 
@@ -29,16 +29,18 @@ export default function EditPosting(props) {
     const blogList = useSelector(state => state.blogList);
     const { blogs } = blogList;
     const myblogs = blogs && blogs.filter(blog => blog.author._id === userInfo._id);
+    const categoryList = useSelector(state => state.categoryList);
+    const { categories } = categoryList;
 
     const [title, setTitle] = useState(posting ? posting.title : '');
     const [blog, setBlog] = useState(posting ? posting.blog._id : '');
-    const [category, setCategory] = useState(posting ? posting.category : '');
+    const [category, setCategory] = useState(posting ? posting.category._id : '');
     const [text, setText] = useState(posting ? posting.text : '');
     const [image, setImage] = useState(posting ? posting.image : '');
     const [hashtags, setHashtags] = useState(posting ? posting.hashtags.join(',').toString()  : '');
 
-    const categories = CATEGORIES.map(category => (
-        <option value={category} key={category}>{category}</option>
+    const categoryOptions = categories && categories.map(category => (
+        <option value={category._id} key={category._id}>{category.name}</option>
     ));
 
     const mybloglist = myblogs 
@@ -102,6 +104,7 @@ export default function EditPosting(props) {
         }
         dispatch(getPostingDetails(postingId));
         dispatch(blogGetList());
+        dispatch(getCategoryList());
         resetHandler();
         
         if (successUpdate) {
@@ -109,7 +112,7 @@ export default function EditPosting(props) {
             props.history.push(`/postings/${postingId}`);
             
         }
-    },[dispatch, successUpdate, props.history, userInfo]);
+    },[dispatch, successUpdate, props.history, userInfo, postingId]);
 
     return (
         <div className="container__long">
@@ -119,6 +122,7 @@ export default function EditPosting(props) {
                 </h1>
                 {loading && <Loading />}
                 {error && <Message message="error">{error}</Message>}
+                {errorUpdate && <Message message="error">{errorUpdate}</Message>}
                 <div className="row">
                     <input
                         className="form__input"
@@ -144,17 +148,17 @@ export default function EditPosting(props) {
                     <select
                             className="form__input"
                             id="category"
-                            onChange={e => setCategory(e.target.value)}
                             value={category}
+                            onChange={e => setCategory(e.target.value)}
                     >
                         <option defaultValue={true} value="">select category</option>
-                        {categories}
+                        {categoryOptions}
                     </select>
                 </div>
                 <div className="row">
                     <Editor
                         apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-                        initialValue={`<p>${posting ? posting.text : 'Write your story here'}</p>`}
+                        initialValue={posting ? posting.text : '<p>Write your story here</p>'}
                         init={{
                             height: 400,
                             width: 800,
@@ -199,14 +203,13 @@ export default function EditPosting(props) {
                         disabled={isValid ? false : true}
                         style={{backgroundColor: isValid ? 'var(--Blue)' : 'var(--Gray)', boxShadow: !isValid && 'none'}}
                     >
-                        update this story
+                        {loadingUpdate ? <loading /> : 'update'}
                     </button>
                 </div>
                 <div className="row between">
                     <button className="btn btn__reset" type="reset" onClick={resetHandler}>reset</button>
                     <button className="btn btn__cancel" onClick={() => props.history.push('/blogs')}>cancel</button>
                 </div>
-                
             </form>
         </div>
     )

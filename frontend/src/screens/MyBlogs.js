@@ -27,16 +27,18 @@ export default function MyBlogs(props) {
   
     const deleteBlogHandler = (blog) => {
         if (window.confirm(`Are you sure you wish to delete "${blog.title.toUpperCase()}"?`)) {
+            
             if (postings) {
-                const blogPostings = postings.filter(posting => posting.blog._id === blog._id);
-                if (blogPostings) {
+                const blogPostings = postings.filter(posting => posting.blog === blog._id);
+                if (blogPostings && (blogPostings.length >= 1)) {
                     blogPostings.forEach(posting => {
                         dispatch(deletePosting(posting._id))
                     }
-                    )}
-                } 
-            }
+                )}
+            } 
             dispatch(deleteBlog(blog._id));
+        }
+       
     };
 
     const deletePostingHandler = (posting) => {
@@ -64,7 +66,7 @@ export default function MyBlogs(props) {
             <div className="content__container" key={blog._id}>
                 <img className="content__img" src={blog.image} alt="sectionimage"/> 
                 <div className="content__subtitle">
-                    <p className="content__category">{blog.category}</p>
+                    <p className="content__category">{blog.category.name}</p>
                 </div>
                 <h3 className="content__title">{blog.title}</h3>
                 <div className="row right content__subtitle">
@@ -91,9 +93,10 @@ export default function MyBlogs(props) {
             <div className="content__container" key={posting._id}>
                 <img className="content__img" src={posting.image} alt="sectionimage"/> 
                 <div className="content__subtitle">
-                    <h4 className="content__category">{posting.category}</h4>
+                    <h4 className="content__category">{posting.category.name}</h4>
                 </div>   
                 <h3 className="content__title">{posting.title}</h3>
+                {/* <h5>in <span className="italic">{posting.blog}</span></h5> */}
                 <h5>in <span className="italic">{posting.blog.title}</span></h5>
                 <div className="row right content__subtitle">
                     <p>{posting.like} liked</p>
