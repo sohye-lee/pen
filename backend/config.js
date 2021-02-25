@@ -1,5 +1,5 @@
 export const config = {
-    'mongoUrl' : "mongodb+srv://sohye:Sohye8458@projects.gvqvc.mongodb.net/pen?retryWrites=true&w=majority",
+    'mongoUrl' : "mongodb+srv://sohye:Sohye8458@projects.gvqvc.mongodb.net/blogsite?retryWrites=true&w=majority",
     'secretKey' : "12345-67890",
     "facebook" : {
         clientId: "165637475015395",

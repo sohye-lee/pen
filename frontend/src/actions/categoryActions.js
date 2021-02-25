@@ -17,15 +17,24 @@ export const getCategoryList = () => async(dispatch) => {
         const { data } = await Axios.get('/categories');
         dispatch({ type: CATEGORY_GET_SUCCESS, payload: data });
     } catch (error) {
-        dispatch({ type: CATEGORY_GET_FAIL, payload: error.message });
+        dispatch({ 
+            type: CATEGORY_GET_FAIL, 
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message, });
     }
 };
 
-export const addCategory = (name) => async(dispatch) => {
+export const addCategory = (name) => async(dispatch, getState) => {
+    const { userLogin: { userInfo } } = getState(); 
     dispatch({ type: CATEGORY_ADD_REQUEST, payload: name });
     try {
         const { data } = await Axios.post('/categories', 
-        { name: name });
+        name, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        });
         dispatch({ type: CATEGORY_ADD_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: CATEGORY_ADD_FAIL, payload: error.message });
@@ -35,7 +44,7 @@ export const addCategory = (name) => async(dispatch) => {
 export const deleteCategory = (categoryId) => async(dispatch) => {
     dispatch({ type: CATEGORY_DELETE_REQUEST });
     try {
-        const { data } = await Axios.post(`'/categories/${categoryId}`);
+        const { data } = await Axios.delete(`/categories/${categoryId}`);
         dispatch({ type: CATEGORY_DELETE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: CATEGORY_DELETE_FAIL, payload: error.message });

@@ -16,6 +16,7 @@ import Main from './screens/Main';
 import Follows from './screens/Follows';
 import Search from './screens/Search';
 import Author from './screens/Author';
+import AdminCategory from './screens/AdminCategory';
 
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
                     <Route path="/postings/:postingId/edit" component={(props) => <EditPosting {...props} search={search} />} exact />
                     <Route path="/follows" component={(props) => <Follows {...props} search={search} />} />
                     <Route path="/authors/:userId" component={(props) => <Author {...props} search={search} />} />
+                    <Route path="/admin/category" component={(props) => <AdminCategory {...props} search={search} />} exact />
                 </div>
                 <Footer />
             </div>

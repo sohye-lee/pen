@@ -29,7 +29,7 @@ export default function MyBlogs(props) {
         if (window.confirm(`Are you sure you wish to delete "${blog.title.toUpperCase()}"?`)) {
             
             if (postings) {
-                const blogPostings = postings.filter(posting => posting.blog === blog._id);
+                const blogPostings = postings.filter(posting => posting.blog._id === blog._id);
                 if (blogPostings && (blogPostings.length >= 1)) {
                     blogPostings.forEach(posting => {
                         dispatch(deletePosting(posting._id))
