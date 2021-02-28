@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory, deleteCategory, getCategoryList } from '../actions/categoryActions';
+import { addCategory, deleteCategory, editCategory, getCategoryList } from '../actions/categoryActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
@@ -13,6 +13,7 @@ export default function AdminCategory() {
     const categoryDelete = useSelector(state => state.categoryDelete);
     const { loading: loadingDelete, success: successDelete, error: errorDelete } = categoryDelete;
 
+    const [categoryName, setCategoryName] = useState('');
 
     const addCategoryHandler = () => {
         dispatch(addCategory({name: "new category"}));
@@ -23,7 +24,7 @@ export default function AdminCategory() {
     }
 
     const editCategoryHandler = () => {
-
+        dispatch(editCategory({ name: categoryName }));
     }
 
     const renderCategory = (category) => {
@@ -32,7 +33,7 @@ export default function AdminCategory() {
                 <td>{category.name}</td>
                 <td className="row center">
                     <button className="btn small btn__reset" onClick={editCategoryHandler}>edit</button>
-                    <button className="btn small btn__cancel" onClick={() => deleteCategoryHandler(category._id)}>delete</button>
+                    {/* <button className="btn small btn__cancel" onClick={() => deleteCategoryHandler(category._id)}>delete</button> */}
                 </td>
             </tr>
         )
@@ -47,7 +48,7 @@ export default function AdminCategory() {
                 <h1 className="form__title">
                     categories
                 </h1>
-                <button className="btn small row right" onClick={addCategoryHandler}>+ add</button>
+                {/* <button className="btn small row right" onClick={addCategoryHandler}>+ add</button> */}
                 {loadingAdd && <Loading />}
                 {errorAdd && <Message message="eror">{errorAdd}</Message>}
                 {loading && <Loading />}
@@ -61,6 +62,13 @@ export default function AdminCategory() {
                     </thead>
                     <tbody>
                         {categories && categories.map(category => renderCategory(category))}
+                        <tr>
+                            <td><input /></td>
+                            <td className="row center">
+                                <button className="btn small btn__reset" onClick={addCategoryHandler}>add</button>
+                                {/* <button className="btn small btn__cancel" onClick={() => deleteCategoryHandler(category._id)}>delete</button> */}
+                            </td>
+            </tr>
                     </tbody>
                 </table>
             </div>

@@ -26,6 +26,17 @@ categoryRouter.route('/')
 })
 
 categoryRouter.route('/:categoryId')
+.put((req,res,next) => {
+    Category.findByIdAndUpdate(req.params.categoryId, {
+        $set: req.body
+    }, { new: true })
+    .then(category => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(category);
+    })
+    .catch(err => next(err));
+})
 .delete((req,res,next) => {
     Category.findByIdAndDelete(req.params.categoryId)
     .then(response => {

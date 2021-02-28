@@ -6,6 +6,9 @@ import {
     CATEGORY_DELETE_FAIL, 
     CATEGORY_DELETE_REQUEST, 
     CATEGORY_DELETE_SUCCESS, 
+    CATEGORY_EDIT_FAIL, 
+    CATEGORY_EDIT_REQUEST, 
+    CATEGORY_EDIT_SUCCESS, 
     CATEGORY_GET_FAIL, 
     CATEGORY_GET_REQUEST, 
     CATEGORY_GET_SUCCESS 
@@ -48,5 +51,20 @@ export const deleteCategory = (categoryId) => async(dispatch) => {
         dispatch({ type: CATEGORY_DELETE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: CATEGORY_DELETE_FAIL, payload: error.message });
+    }
+};
+
+export const editCategory = (category) => async(dispatch, getState) => {
+    const { userLogin: { userInfo } } = getState();
+    dispatch({ type: CATEGORY_EDIT_REQUEST, payload: category });
+    try {
+        const { data } = await Axios.put(`/categories/${category._id}`, category, {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        })
+        dispatch({ type: CATEGORY_EDIT_SUCCESS, payload: category });
+    } catch (error) {
+        dispatch({ type: CATEGORY_EDIT_FAIL, payload: error.message });
     }
 };
