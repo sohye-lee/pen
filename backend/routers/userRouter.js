@@ -27,25 +27,30 @@ userRouter.route('/')
 
 userRouter.route('/signup')
 .post((req,res,next) => {
-    User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8),
-        isAdmin: req.body.isAdmin
-    })
+    User.findOne({email: req.body.email})
     .then(user => {
-        console.log('User Registered : ', user);
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.send({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            isAdmin: user.isAdmin,
-            token: generateToken(user)
-        });
+        if (user) {
+            res.statusCode = 409;
+            res.end('Email already exists')
+        } else {
+            User.create({
+                username: req.body.username,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password, 8),
+                introduction: req.body.introduction,
+                image: req.body.image,
+                isAdmin: req.body.isAdmin
+            })
+            .then(user => {
+                console.log('New User Registered : ', user);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user)
+            })
+            .catch(err => next(err));
+        }
     })
-    .catch(err => next(err));
+    .catch(err => next(err))
 });
 
 userRouter.route('/login')
@@ -65,7 +70,6 @@ userRouter.route('/login')
             } else {
                 res.statusCode = 401;
                 throw new Error("Password invalid. Please try again")
-            
             }
         } else {
             res.statusCode = 404;

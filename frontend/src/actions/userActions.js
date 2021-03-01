@@ -2,20 +2,14 @@ import Axios from 'axios';
 import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_PROFILE_FAIL, USER_PROFILE_REQUEST, USER_PROFILE_SUCCESS, USER_SIGNUP_FAIL, USER_SIGNUP_REQUEST, USER_SIGNUP_SUCCESS, USER_UPDATE_FAIL, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from '../constants/userConstants';
 
 
-export const signup = (username, email, password) => async(dispatch) => {
+export const signup = ({username, email, password, introduction, image, isAdmin}) => async(dispatch) => {
     dispatch({ 
         type: USER_SIGNUP_REQUEST, 
-        payload: { 
-            username,
-            email,
-            password
-        }
+        payload: { username, email, password, introduction, image, isAdmin }
     });
 
     try {
-        const { data } = await Axios.post('/users/signup', {
-            username, email, password
-        });
+        const { data } = await Axios.post('/users/signup', { username, email, password, introduction, image, isAdmin });
 
         dispatch({ type: USER_SIGNUP_SUCCESS, payload: data });
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
@@ -50,12 +44,12 @@ export const logout = () => async(dispatch) => {
 
 export const profile = (userId) => async(dispatch, getState) => {
     dispatch({ type: USER_PROFILE_REQUEST, payload: userId });
-    // const { userLogin: { userInfo } } = getState();
+    const { userLogin: { userInfo } } = getState();
     try {
-        // const { data } = await Axios.get(`/users/${userId}`, {
-        //     headers: { Authorization: `Bearer ${userInfo.token}`}
-        // });
-        const { data } = await Axios.get(`/users/${userId}`);
+        const { data } = await Axios.get(`/users/${userId}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}`}
+        });
+        // const { data } = await Axios.get(`/users/${userId}`);
         dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: USER_PROFILE_FAIL, payload: error.message });

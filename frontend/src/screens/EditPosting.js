@@ -16,9 +16,9 @@ dotenv.config();
 export default function EditPosting(props) {
     const dispatch = useDispatch();
     const postingId = props.match.params.postingId;
-    const redirectPath = props.location
-        ? props.location.search.split('=')[1]
-        : '/';
+    // const redirectPath = props.location
+    //     ? props.location.search.split('=')[1]
+    //     : '/';
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -35,7 +35,7 @@ export default function EditPosting(props) {
     const [title, setTitle] = useState(posting ? posting.title : '');
     const [blog, setBlog] = useState(posting ? posting.blog._id : '');
     const [category, setCategory] = useState(posting ? posting.category._id : '');
-    const [text, setText] = useState(posting ? posting.text : '');
+    const [text, setText] = useState(posting && posting.text );
     const [image, setImage] = useState(posting ? posting.image : '');
     const [hashtags, setHashtags] = useState(posting ? posting.hashtags.join(',').toString()  : '');
 
@@ -158,10 +158,10 @@ export default function EditPosting(props) {
                 <div className="row">
                     <Editor
                         apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-                        initialValue={posting ? posting.text : '<p>Write your story here</p>'}
+                        initialValue={posting && posting.text}
                         init={{
-                            height: 400,
-                            width: 800,
+                            height: 500,
+                            width: 900,
                             menubar: false,
                             content_style: 'body { font-family:Courier New, Courier, monospace; font-size:1.1rem }',
                             plugins: [

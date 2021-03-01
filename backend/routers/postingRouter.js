@@ -18,10 +18,10 @@ postingRouter.route('/')
         res.json(postings);
     })
 })
-.post(isAuth, (req,res,next) => {
+.post((req,res,next) => {
     Posting.create(req.body)
-    .populate('author')
-    .populate('blog')
+    // .populate('author')
+    // .populate('blog')
     .then(posting => {
         console.log('New Posting Created ', posting);
         res.statusCode = 200;

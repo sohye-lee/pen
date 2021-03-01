@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Axios from 'axios';
 import { signup } from '../actions/userActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
@@ -11,7 +12,7 @@ export default function Signup(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [image, setImage] = useState('/user.png');
+    const [image, setImage] = useState('');
     const [introduction, setIntroduction] = useState('');
 
     const userSignup = useSelector(state => state.userSignup);
@@ -21,21 +22,48 @@ export default function Signup(props) {
         ? props.location.search.split('=')[1]
         : '/';
 
+
+    const [imageUploadLoading, setImageUploadLoading] = useState(false);
+    const [imageUploadError, setImageUploadError] = useState('');
+    
+    const imageUploadHandler = async (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        
+        setImageUploadLoading(true)
+        try {
+            const { data } = await Axios.post('/images', bodyFormData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    // Authorization: `Bearer ${userInfo.token}`
+                }
+            })
+            setImageUploadLoading(false);
+            setImage(data);
+        } catch (error) {
+            setImageUploadLoading(false);
+            setImageUploadError(error.message);
+        }
+    }
+
     const submitHandler = (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert('Password not matched. Please confirm your password.');
         } else {
-            dispatch(signup(username, email, password, image, introduction));
-            alert(`Welcome, you are now our new writer! \nusername: ${username} \nemail: ${email}`);
+            console.log({username, email, password, introduction, image})
+            dispatch(signup({username, email, password, introduction, image, isAdmin: false}));
+            alert(`Welcome, our new writer! \nusername: ${username} \nemail: ${email}`);
         }
     }
 
     useEffect(() => {
-        if (userInfo) {
-            props.history.push(redirectPath);
-        }
-    }, [dispatch, props.history, redirectPath, userInfo]);
+        // if (userInfo) {
+        //     props.history.push(redirectPath);
+        // }
+        
+    }, [dispatch, props.history, redirectPath]);
 
     return (
         <div className="container__center">
@@ -86,17 +114,28 @@ export default function Signup(props) {
                     />
                 </div>
                 <div className="row">
-                        <textarea 
-                            className="form__input"
-                            type="text"
-                            id="introduction"
-                            rows={3}
-                            placeholder="tell us about you"
-                            value={introduction}
-                            onChange={e => setIntroduction(e.target.value)}
-                        />
-                    </div>
-                    <div className="row">
+                    <textarea 
+                        className="form__input"
+                        type="text"
+                        id="introduction"
+                        rows={3}
+                        placeholder="tell us about you"
+                        value={introduction}
+                        onChange={e => setIntroduction(e.target.value)}
+                    />
+                </div>
+                <div className="row">
+                    <input
+                        className="form__input"
+                        type="file"
+                        id="image"
+                        placeholder="image"
+                        onChange={imageUploadHandler}
+                    />
+                    {imageUploadLoading && <Loading />}
+                    {imageUploadError && <Message message="error">{imageUploadError}</Message>}
+                </div>
+                    {/* <div className="row">
                         <input 
                             className="form__input"
                             type="text"
@@ -105,9 +144,9 @@ export default function Signup(props) {
                             value={image}
                             onChange={e => setImage(e.target.value)}
                         />
-                    </div>
+                    </div> */}
                 <div className="row">
-                    <button className="form__btn btn" type="submit">Create</button>
+                    <button className="form__btn btn" type="submit">Sign up</button>
                 </div>
             </form>
         </div>

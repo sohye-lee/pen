@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import { createPosting } from '../actions/postingActions';
-import { CATEGORIES } from '../category';
+// import { CATEGORIES } from '../category';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import { POSTING_CREATE_RESET } from '../constants/postingConstants';
@@ -55,10 +55,7 @@ export default function CreatePosting(props) {
         setHashtags('');
     };
 
-    const submitHandler = () => {
-        const hashList = RenderHashtags(hashtags);
-        dispatch(createPosting(title, blog, category, text, image, hashList));
-    };
+ 
 
     const [imageUploadLoading, setImageUploadLoading] = useState(false);
     const [imageUploadError, setImageUploadError] = useState('');
@@ -83,6 +80,10 @@ export default function CreatePosting(props) {
         }
     }
 
+    const submitHandler = () => {
+        const hashList = RenderHashtags(hashtags);
+        dispatch(createPosting({title, blog, category, text, image, hashtags: hashList}));
+    };
 
     let isValid = false;
     if (title !== '' && blog !== '' && category !== '' && text !== '' && image !== '') {

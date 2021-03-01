@@ -40,7 +40,7 @@ export const getPostingDetails = (postingId) => async(dispatch) => {
     }
 };
 
-export const createPosting = (title, blog, category, text, image, hashtags) => async(dispatch, getState) => {
+export const createPosting = ({title, blog, category, text, image, hashtags}) => async(dispatch, getState) => {
     const { userLogin: { userInfo } } = getState();
     dispatch({ type: POSTING_CREATE_REQUEST, payload: {
         author: userInfo._id, title, blog, category, text, image, hashtags

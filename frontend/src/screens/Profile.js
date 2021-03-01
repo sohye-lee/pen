@@ -72,7 +72,7 @@ export default function Profile(props) {
                             type="text"
                             id="username"
                             placeholder="username"
-                            value={username}
+                            value={userInfo && userInfo.username}
                             onChange={e => setUsername(e.target.value)}
                         />
                     </div>

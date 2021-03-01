@@ -63,7 +63,7 @@ export const editCategory = (category) => async(dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         })
-        dispatch({ type: CATEGORY_EDIT_SUCCESS, payload: category });
+        dispatch({ type: CATEGORY_EDIT_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: CATEGORY_EDIT_FAIL, payload: error.message });
     }
