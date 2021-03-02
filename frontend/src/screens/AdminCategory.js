@@ -8,7 +8,7 @@ import Message from '../components/Message';
 export default function AdminCategory(props) {
     const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
-    const { loading: loadingUser, userInfo, error: errorUser } = userLogin;
+    const { userInfo } = userLogin;
     const categoryList = useSelector(state => state.categoryList);
     const { loading, categories, error } = categoryList;
     const categoryAdd = useSelector(state => state.categoryAdd);
@@ -21,10 +21,7 @@ export default function AdminCategory(props) {
     const [categoryEditName, setCategoryEditName] = useState('');
     const [modalShow, setModalShow] = useState("none");
 
-    if (!userInfo.isAdmin) {
-        alert('You must be an admin user to access this page!');
-        props.history.push('/');
-    }
+
     const toggleEditModal = () => {
         if (modalShow === "none") {
             setModalShow("flex");
@@ -47,7 +44,7 @@ export default function AdminCategory(props) {
                 <td>
                     {category.name}
                 </td>
-                <td className="row center">
+                <td className="row right">
                     <button 
                         className="btn small btn__reset" 
                         onClick={() => { 
@@ -63,6 +60,15 @@ export default function AdminCategory(props) {
     }
 
     useEffect(() => {
+        if (!userInfo) {
+            alert('You need to login first!')
+            props.history.push('/login')
+        }
+        
+        if (userInfo && !userInfo.isAdmin) {
+            alert('You must be an admin user to access this page!');
+            props.history.push('/');
+        }    
 
         if (successAdd) {
             setCategoryName('');
@@ -101,7 +107,7 @@ export default function AdminCategory(props) {
                                     onChange={(e) => setCategoryName(e.target.value)}
                                 />
                             </td>
-                            <td className="row center">
+                            <td className="row right">
                                 <button className="btn small btn__cancel" onClick={addCategoryHandler}>add</button>
                             </td>
                         </tr>

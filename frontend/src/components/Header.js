@@ -19,6 +19,7 @@ export default function Header({setSearch}) {
         if (display === "none") {
             setDisplay("flex");
             setDropdown("none");
+            setAdminDropdown("none")
         } else {
             setDisplay("none");
         }
@@ -28,6 +29,7 @@ export default function Header({setSearch}) {
         if (dropdown === "none") {
             setDropdown("flex");
             setDisplay("none");
+            setAdminDropdown("none")
         } else {
             setDropdown("none");
         }
@@ -36,10 +38,11 @@ export default function Header({setSearch}) {
     const [adminDropdown, setAdminDropdown] = useState('none');
     const adminDropdownToggler = () => {
         if (adminDropdown === "none") {
-            setDropdown("flex");
+            setAdminDropdown("flex");
             setDisplay("none");
+            setDropdown('none')
         } else {
-            setDropdown("none");
+            setAdminDropdown("none");
         }
     };
 
@@ -121,11 +124,11 @@ export default function Header({setSearch}) {
                             <div className="header__item profile" onClick={adminDropdownToggler}>
                                     isAdmin <i className="fa fa-caret-down "/>
                             </div>
-                            <div className="header__dropdown" style={{display: adminDropdown}} onClick={() => setAdminDropdown("none")}>
-                                    <Link className="header__item" to="/profile" onClick={() => setAdminDropdown("none")}>profile</Link>
-                                    <Link className="header__item" to="/write" onClick={() => setAdminDropdown("none")}>write</Link>
-                                    <Link className="header__item" to="/blogs" onClick={() => setAdminDropdown("none")}>my blogs</Link>
-                                    <Link className="header__item" to="/follows" onClick={() => setAdminDropdown("none")}>follows</Link>
+                            <div className="header__dropdown admin" style={{display: adminDropdown}} onClick={() => setAdminDropdown("none")}>
+                                    <Link className="header__item" to="/admin/dashboard" onClick={() => setAdminDropdown("none")}>dashboard</Link>
+                                    <Link className="header__item" to="/admin/category" onClick={() => setAdminDropdown("none")}>category</Link>
+                                    <Link className="header__item" to="/admin/users" onClick={() => setAdminDropdown("none")}>users</Link>
+                                    <Link className="header__item" to="/admin/contents" onClick={() => setAdminDropdown("none")}>contents</Link>
                                 </div>
                         </div>}
                         <div onClick={displayToggler}>

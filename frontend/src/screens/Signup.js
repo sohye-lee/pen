@@ -59,9 +59,9 @@ export default function Signup(props) {
     }
 
     useEffect(() => {
-        // if (userInfo) {
-        //     props.history.push(redirectPath);
-        // }
+        if (userInfo) {
+            props.history.push(redirectPath || '/');
+        }
         
     }, [dispatch, props.history, redirectPath]);
 

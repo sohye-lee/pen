@@ -32,6 +32,7 @@ import {
   postingUpdateReducer
 } from './reducers/postingReducers';
 import { 
+  userListReducer,
   userLoginReducer, 
   userProfileReducer, 
   userSignupReducer,
@@ -52,6 +53,7 @@ const reducer = combineReducers({
     userLogin: userLoginReducer,
     userProfile: userProfileReducer,
     userUpdate: userUpdateReducer,
+    userList: userListReducer,
     blogList: blogListReducer,
     blogDetails: blogDetailsReducer,
     blogCreate: blogCreateReducer,

@@ -1,5 +1,11 @@
 import Axios from 'axios';
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_PROFILE_FAIL, USER_PROFILE_REQUEST, USER_PROFILE_SUCCESS, USER_SIGNUP_FAIL, USER_SIGNUP_REQUEST, USER_SIGNUP_SUCCESS, USER_UPDATE_FAIL, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from '../constants/userConstants';
+import { 
+    USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, 
+    USER_PROFILE_FAIL, USER_PROFILE_REQUEST, USER_PROFILE_SUCCESS, 
+    USER_SIGNUP_FAIL, USER_SIGNUP_REQUEST, USER_SIGNUP_SUCCESS, 
+    USER_UPDATE_FAIL, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS,
+    USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS
+} from '../constants/userConstants';
 
 
 export const signup = ({username, email, password, introduction, image, isAdmin}) => async(dispatch) => {
@@ -68,5 +74,20 @@ export const profileUpdate = (user) => async(dispatch, getState) => {
         localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
         dispatch({ type: USER_UPDATE_FAIL, payload: error.message });
+    }
+};
+
+export const getUserList = () => async(dispatch, getState) => {
+    dispatch({ type: USER_LIST_REQUEST });
+    const { userLogin: { userInfo } } = getState();
+    try {
+        const { data } = await Axios.get('/users', {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        });
+        dispatch({ type: USER_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: USER_LIST_FAIL, payload: error.message });
     }
 };
