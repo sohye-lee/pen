@@ -77,6 +77,21 @@ export const profileUpdate = (user) => async(dispatch, getState) => {
     }
 };
 
+export const adminUpdate = (user) => async(dispatch, getState) => {
+    dispatch({ type: USER_UPDATE_REQUEST, payload: user});
+    const { userLogin: { userInfo } } = getState();
+    try {
+        const { data } = await Axios.put(`/users/${user._id}/update`, user, {
+            headers: { Authorization: `Bearer ${userInfo.token}`}
+        })
+        dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+        // dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+        // localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+        dispatch({ type: USER_UPDATE_FAIL, payload: error.message });
+    }
+};
+
 export const getUserList = () => async(dispatch, getState) => {
     dispatch({ type: USER_LIST_REQUEST });
     const { userLogin: { userInfo } } = getState();

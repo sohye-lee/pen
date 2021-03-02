@@ -46,7 +46,7 @@ export default function App() {
                     <Route path="/authors/:userId" component={(props) => <Author {...props} search={search} />} />
                     <Route path="/admin/category" component={(props) => <AdminCategory {...props} search={search} />} exact />
                     <Route path="/admin/users" component={(props) => <AdminUsers {...props} search={search} />} exact />
-
+                    {/* <Route path="/admin/contents" component={(} */}
                 </div>
                 <Footer />
             </div>

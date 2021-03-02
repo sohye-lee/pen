@@ -68,6 +68,10 @@ th, td {
     border-bottom: 1px dashed var(--LightGray);
 }
 
+ul {
+    list-style: none;
+}
+
 html {
     overflow:   scroll;
 }
@@ -114,6 +118,10 @@ html {
     margin-right: 1rem !important;
 }
 
+.margin__right__xsmall {
+    margin-right: .6rem !important;
+}
+
 .margin__left__small {
     margin-left: 1rem;
 }
@@ -129,8 +137,6 @@ html {
 .margin__vertical__big {
     margin: 2.5rem 0 !important;
 }
-
-
 
 .btn {
     width: 100%;
@@ -204,6 +210,10 @@ html {
 
 .italic {
     font-style: italic;
+}
+
+.nospacing {
+    letter-spacing: 0;
 }
 
 /* ================== ANIMATIONS ================== */
@@ -306,6 +316,10 @@ html {
     transform: translateX(-10px);
     background-color: rgba(0,0,0,.5);
     z-index: 100;
+}
+
+.haeder__dropdown.admin {
+
 }
 
 .header__dropdown .header__item {
@@ -1072,6 +1086,12 @@ html {
     padding: 2rem 0;
     border-bottom: 1px dashed var(--LightGray);
 }
+
+/* ================== DETAILS ================== */
+.hidden__box {
+    
+}
+
 /* ================== RESPONSIVE ================== */
 
 @media all and (max-width: 1024px) {

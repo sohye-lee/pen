@@ -90,7 +90,7 @@ userRouter.route('/:userId')
     })
     .catch(err => next(err));
 })
-.put(isAuth, (req,res,next) => {
+.put(isAuth, isAdmin, (req,res,next) => {
     User.findById(req.body.userId)
     .then(user => {
         if (user) {
@@ -101,6 +101,9 @@ userRouter.route('/:userId')
             }
             user.image = req.body.image || user.image;
             user.introduction = req.body.introduction || user.introduction;
+            if (req.body.isAdmin) {
+                user.isAdmin = req.body.isAdmin;
+            } 
         };
         user.save()
         .then(user => {
@@ -130,5 +133,35 @@ userRouter.route('/:userId')
     })
     .catch(err => next(err));
 });
+
+userRouter.route('/:userId/update')
+.put((req,res,next) => {
+    User.findById(req.body.userId)
+    .then(user => {
+        console.log(req.body)
+        if (user) {
+            user.username = req.body.username || user.name;
+            user.email = req.body.email || user.email;
+            user.image = req.body.image || user.image;
+            user.introduction = req.body.introduction || user.introduction;
+            user.isAdmin = req.body.isAdmin;
+        };
+        user.save()
+        .then(user => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.send({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                image: user.image,
+                introduction: user.introduction,
+                isAdmin: user.isAdmin,
+            })
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+})
 
 export default userRouter;
