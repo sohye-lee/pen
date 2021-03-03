@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { blogGetList } from '../actions/blogActions';
 import { postingGetList } from '../actions/postingActions';
-import { adminUpdate, getUserList } from '../actions/userActions';
+import { adminUpdate, getUserList, profileUpdate } from '../actions/userActions';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
-export default function AdminUsers(props) {
+export default function AdminContents(props) {
     const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -18,11 +18,20 @@ export default function AdminUsers(props) {
     const postingList = useSelector(state => state.postingList);
     const { postings } = postingList;
 
-    const [isAdmin, setIsAdmin] = useState(null);
+    // const [isAdmin, setIsAdmin] = useState(null);
 
-    const updateAdminHandler = (user) => {
-        dispatch(adminUpdate({userId: user._id, username: user.username, email: user.email, introduction: user.introduction, image: user.image, isAdmin}));
-    }
+    // const updateAdminHandler = (user) => {
+    //     const profileToUpdate = {
+    //         _id: user._id,
+    //         username: user.username,
+    //         email: user.email,
+    //         introduction: user.introduction,
+    //         image: user.image,
+    //         isAdmin: isAdmin,
+    //     }
+    //     console.log(profileToUpdate.toString())
+    //     dispatch(adminUpdate({userId: user._id, username: user.username, email: user.email, introduction: user.introduction, image: user.image, isAdmin}));
+    // }
 
     const renderUser = (user) => {
         const myBlogs = blogs && blogs.filter(blog => blog.author._id === user._id);
@@ -51,10 +60,10 @@ export default function AdminUsers(props) {
                     <a href={`mailto:${user.email}`} className="content__text nospacing" style={{color: 'var(--Black)'}}>{user.email}</a>
                 </td>
                 <td style={{textAlign: 'center'}}>
-                    <form className="row between" onSubmit={(e) => {updateAdminHandler(user);}}>
-                        <input type="radio" name="isAdmin" id={user.email+"yes"} value={true} onClick={e => setIsAdmin(e.target.value)} defaultChecked={user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
+                    <form className="row between" >
+                        <input type="radio" name="isAdmin" id={user.email+"yes"} value={true}  defaultChecked={user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
                         <label htmlFor={user.email+"yes"} className="margin__right__xsmall">Yes</label>
-                        <input type="radio" name="isAdmin" id={user.email+"no"} value={false} onClick={e => setIsAdmin(e.target.value)} defaultChecked={!user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
+                        <input type="radio" name="isAdmin" id={user.email+"no"} value={false}  defaultChecked={!user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
                         <label htmlFor={user.email+"no"} className="margin__right__xsmall">No</label>
                         <button className="btn small btn__cancel" type="submit" style={{width: "5rem"}}>Update</button>
                     </form>
