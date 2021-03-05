@@ -51,7 +51,7 @@ export default function AdminUsers(props) {
                     <a href={`mailto:${user.email}`} className="content__text nospacing" style={{color: 'var(--Black)'}}>{user.email}</a>
                 </td>
                 <td style={{textAlign: 'center'}}>
-                    <form className="row between" onSubmit={(e) => {updateAdminHandler(user);}}>
+                    <form className="row between" onSubmit={(e) => updateAdminHandler(user)}>
                         <input type="radio" name="isAdmin" id={user.email+"yes"} value={true} onClick={e => setIsAdmin(e.target.value)} defaultChecked={user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
                         <label htmlFor={user.email+"yes"} className="margin__right__xsmall">Yes</label>
                         <input type="radio" name="isAdmin" id={user.email+"no"} value={false} onClick={e => setIsAdmin(e.target.value)} defaultChecked={!user.isAdmin && 'defaultChecked'} className="margin__right__xsmall"/>
@@ -84,6 +84,7 @@ export default function AdminUsers(props) {
             {loading && <Loading />}
             {error && <Message message="error">{error.message}</Message>}
             <div className="admin__content margin__vertical__big">
+                <h2 className="admin__title">users</h2>
                 <table>
                     <thead>
                         <tr className="admin__row">

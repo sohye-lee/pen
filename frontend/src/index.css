@@ -138,6 +138,9 @@ html {
     margin: 2.5rem 0 !important;
 }
 
+.margin__horizontal__big {
+    margin: 0 2.5rem !important;
+}
 .btn {
     width: 100%;
     margin: .5rem 0;
@@ -165,6 +168,16 @@ html {
     line-height: 2rem;
     font-size: 1.1rem;
     background-color: var(--LightGray);
+    transition: var(--Transition);
+}
+
+.btn.xsmall {
+    width: 5rem;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.1rem;
+    background-color: var(--LightGray);
+
 }
 
 .btn.small:hover {
@@ -1093,6 +1106,10 @@ html {
     width: 100%;
 }
 
+.admin__blogs, .admin__postings {
+    flex-basis: 45%;
+    padding: 2rem 0;
+}
 /* ================== RESPONSIVE ================== */
 
 @media all and (max-width: 1024px) {

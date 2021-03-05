@@ -18,6 +18,7 @@ import Search from './screens/Search';
 import Author from './screens/Author';
 import AdminCategory from './screens/AdminCategory';
 import AdminUsers from './screens/AdminUsers';
+import AdminContents from './screens/AdminContents';
 
 
 export default function App() {
@@ -46,7 +47,7 @@ export default function App() {
                     <Route path="/authors/:userId" component={(props) => <Author {...props} search={search} />} />
                     <Route path="/admin/category" component={(props) => <AdminCategory {...props} search={search} />} exact />
                     <Route path="/admin/users" component={(props) => <AdminUsers {...props} search={search} />} exact />
-                    {/* <Route path="/admin/contents" component={(} */}
+                    <Route path="/admin/contents" component={(props) => <AdminContents {...props} search={search} />} exact />
                 </div>
                 <Footer />
             </div>

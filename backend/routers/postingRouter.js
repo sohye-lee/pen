@@ -55,7 +55,7 @@ postingRouter.route('/:postingId')
     })
     .catch(err => next(err));
 })
-.put((req,res,next) => {
+.put(isAuth, isAdmin, (req,res,next) => {
     Posting.findByIdAndUpdate(req.params.postingId, {
         $set: req.body
     }, { new: true })
@@ -66,7 +66,7 @@ postingRouter.route('/:postingId')
     })
     .catch(err => next(err));
 })
-.delete(isAuth, (req,res,next) => {
+.delete(isAuth, isAdmin, (req,res,next) => {
     Posting.findByIdAndDelete(req.params.postingId)
     .then(response => {
         res.statusCode = 200;
